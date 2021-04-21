@@ -13,7 +13,7 @@ import sb.rf.generalchat.model.User;
 import sb.rf.generalchat.model.dto.FirstMessageDto;
 import sb.rf.generalchat.model.dto.UserChangeSettingsDto;
 import sb.rf.generalchat.security.details.UserDetailsImpl;
-import sb.rf.generalchat.service.IUserService;
+import sb.rf.generalchat.service.UserService;
 import sb.rf.generalchat.util.AuthenticationFacade;
 
 
@@ -28,7 +28,7 @@ import java.util.Objects;
 public class ProfileController {
     @Autowired
  /*   @Qualifier("userServiceImpl")*/
-    private IUserService userService;
+    private UserService userService;
     @Autowired
     private AuthenticationFacade authenticationFacade;
 

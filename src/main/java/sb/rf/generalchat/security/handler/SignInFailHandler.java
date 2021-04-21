@@ -21,7 +21,7 @@ public class SignInFailHandler extends SimpleUrlAuthenticationFailureHandler {
             log.info("Given object");
             log.info(new ObjectInputStream(request.getInputStream()).readObject().toString());
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            throw  new IOException(e);
         }
         response.sendError(HttpServletResponse.SC_OK);
     }

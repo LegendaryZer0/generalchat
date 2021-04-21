@@ -3,16 +3,11 @@ package sb.rf.generalchat.webSocket;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
-import org.springframework.web.socket.server.standard.SpringConfigurator;
-import sb.rf.generalchat.model.Message;
 import sb.rf.generalchat.model.dto.MessagesDto;
-import sb.rf.generalchat.service.IMessageService;
-import sb.rf.generalchat.service.IUserService;
+import sb.rf.generalchat.service.MessageService;
+import sb.rf.generalchat.service.UserService;
 import sb.rf.generalchat.webSocket.output.format.Decoder;
 import sb.rf.generalchat.webSocket.output.format.Encoder;
 
@@ -36,26 +31,26 @@ public class ChatServerEndPoint {
             = new CopyOnWriteArraySet<>();
 
    /* @Qualifier("userService")*/
-/*    private  IUserService userServiceStatic*//*=applicationContext.getBean("userServiceImpl",IUserService.class)*//*;*/
+/*    private  UserService userServiceStatic*//*=applicationContext.getBean("userServiceImpl",UserService.class)*//*;*/
     @Autowired
-    public  void setUserService(IUserService userService) {
+    public  void setUserService(UserService userService) {
         ChatServerEndPoint.userService = userService;
     }
 
 
-    private static IUserService userService;
+    private static UserService userService;
 
    /* @Qualifier("messageService")*/
       //Todo разобраться с autowired
-    private static IMessageService messageService/*= applicationContext.getBean("messageServiceImpl",IMessageService.class);*/;
+    private static MessageService messageService/*= applicationContext.getBean("messageServiceImpl",MessageService.class);*/;
     @Autowired
-    public  void setMessageService(IMessageService messageService) {
+    public  void setMessageService(MessageService messageService) {
         ChatServerEndPoint.messageService = messageService;
     }
 
     private String sessionId;
     private Session session;
-    public ChatServerEndPoint(IUserService userService, IMessageService messageService){
+    public ChatServerEndPoint(UserService userService, MessageService messageService){
         this.userService = userService;
         this.messageService =messageService;
     }

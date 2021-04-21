@@ -18,13 +18,13 @@ import java.util.UUID;
 
 @Table(name = "technical_Info", schema = "public")
 public class TechnicalInfo   implements Serializable {
-  /*  private static final long serialVersionUID = 34932398932841L;*/
+
+    @Column(name = "uuid", nullable = true)
     private UUID uuid;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Basic
     @Column(name = "isdeleted", nullable = false)
     private Boolean isDeleted;
     @Enumerated(EnumType.STRING)
@@ -36,26 +36,6 @@ public class TechnicalInfo   implements Serializable {
     public enum ConfirmState{
         CONFIRMED,NONE_CONFIRMED
     }
-
-    @Basic
-    @Column(name = "uuid", nullable = true)
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
 
     @Override
     public boolean equals(Object o) {

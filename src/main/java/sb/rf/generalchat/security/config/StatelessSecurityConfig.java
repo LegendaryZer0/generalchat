@@ -48,7 +48,7 @@ public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter {
         try {
             auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw  new IllegalStateException(e);
 
         }
 

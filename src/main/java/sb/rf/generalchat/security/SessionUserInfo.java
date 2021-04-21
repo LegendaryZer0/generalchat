@@ -8,19 +8,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import sb.rf.generalchat.model.User;
-import sb.rf.generalchat.service.IUserService;
-
-
-import java.io.Serializable;
+import sb.rf.generalchat.service.UserService;
 
 @Component
 @Scope(scopeName = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Slf4j
-public class SessionUserInfo /*implements Serializable*/ {
+public class SessionUserInfo {
     private User user;
- /*   private static final  long serialVersionUID =-6952197170951199873L;*/
+
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     public void setUserForce(User user) {
         this.user = user;

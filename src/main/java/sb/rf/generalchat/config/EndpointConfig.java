@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
-import sb.rf.generalchat.service.IMessageService;
-import sb.rf.generalchat.service.IUserService;
+import sb.rf.generalchat.service.MessageService;
+import sb.rf.generalchat.service.UserService;
 import sb.rf.generalchat.webSocket.ChatServerEndPoint;
 
 @Configuration
@@ -15,10 +15,10 @@ import sb.rf.generalchat.webSocket.ChatServerEndPoint;
 public class EndpointConfig
 {
     @Autowired
-    IMessageService messageService;
+    MessageService messageService;
 
     @Autowired
-    IUserService userService;
+    UserService userService;
     @Bean
     @Lazy
     public ChatServerEndPoint chatEndpointNew(){
@@ -27,7 +27,6 @@ public class EndpointConfig
 
 
     @Bean
-  /*  @Lazy*/
     public ServerEndpointExporter endpointExporter(){
         ServerEndpointExporter endpointExporter = new ServerEndpointExporter();
         endpointExporter.setAnnotatedEndpointClasses(ChatServerEndPoint.class);

@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sb.rf.generalchat.model.User;
 import sb.rf.generalchat.model.dto.RegistrationDto;
-import sb.rf.generalchat.service.IUserService;
+import sb.rf.generalchat.service.UserService;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api")
 public class AccountController {
     @Autowired
-    private IUserService userService;
+    private UserService userService;
     @GetMapping("/account/{user_email}")
     public ResponseEntity<User> getUserByEmail(@PathVariable("user_email") String email){
 

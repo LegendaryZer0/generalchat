@@ -14,7 +14,6 @@ import java.util.Objects;
 @Builder
 @Data
 public class Message  implements Serializable {
-  /*  private static final long serialVersionUID = 34932398932842L;*/
     @Type(type = "long")
     private Long idTo;
     @Type(type = "long")
@@ -35,10 +34,10 @@ public class Message  implements Serializable {
     @JoinColumn(name = "id_from", referencedColumnName = "id", insertable = false,updatable = false)
     private User userByIdFrom;
 /*    @Enumerated(EnumType.STRING)
-    private MessageStatus messageStatus;*/
-    public enum MessageStatus {
+    private MessageStatus messageStatus;*/ //Todo Stomp протокол
+ /*   public enum MessageStatus {
         RECEIVED, DELIVERED
-    }
+    }*/
 
     @Basic
     @Column(name = "id_to", nullable = true)

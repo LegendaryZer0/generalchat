@@ -3,15 +3,16 @@ package sb.rf.generalchat.controller.messenger;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sb.rf.generalchat.model.Message;
 import sb.rf.generalchat.model.User;
 import sb.rf.generalchat.model.dto.MessagesDto;
 import sb.rf.generalchat.security.SessionUserInfo;
-import sb.rf.generalchat.service.IChatService;
-import sb.rf.generalchat.service.IMessageService;
-import sb.rf.generalchat.service.IUserService;
+import sb.rf.generalchat.service.ChatService;
+import sb.rf.generalchat.service.MessageService;
+import sb.rf.generalchat.service.UserService;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,16 +25,13 @@ import java.util.UUID;
 @RequestMapping("/user")
 public class MessengerController {
     @Autowired
-    /*@Qualifier("userService")*/
-    private IUserService userService;
+    private UserService userService;
     @Autowired
-    /*@Qualifier("messageService")*/
-    private IMessageService messageService;
+    private MessageService messageService;
     private User user;
 
     @Autowired
-  /*  @Qualifier("chatService")*/
-    private IChatService chatService;
+    private ChatService chatService;
 
     @Autowired
     private SessionUserInfo sessionUserInfo;
@@ -55,6 +53,7 @@ public class MessengerController {
     @PostMapping("/giveUrl")
     @ResponseBody
     public UUID getUUIDForUsers(@RequestBody Long[] data){
+
         UUID uuid =  chatService.getChatUUID(data);
         log.info("uuid отправлено : {}",uuid );
         return uuid;
@@ -78,17 +77,6 @@ public class MessengerController {
         return "Messenger";
 
     }
-
-
-
-
-
-
-
-
-
-
-
     @Data
     private  static  class Pair {
         private long id_from;

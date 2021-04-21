@@ -12,8 +12,8 @@ import sb.rf.generalchat.model.Message;
 import sb.rf.generalchat.model.User;
 import sb.rf.generalchat.model.dto.FirstMessageDto;
 import sb.rf.generalchat.model.dto.UserChangeSettingsDto;
-import sb.rf.generalchat.service.IMessageService;
-import sb.rf.generalchat.service.IUserService;
+import sb.rf.generalchat.service.MessageService;
+import sb.rf.generalchat.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -28,11 +28,10 @@ public class MessageSendController {
     private User user;
     private Message message;
     @Autowired
-  /*  @Qualifier("messageServiceImpl")*/
-    private IMessageService messageService;
+    private MessageService messageService;
     @Autowired
- /*   @Qualifier("userServiceImpl")*/
-    private IUserService userService;
+
+    private UserService userService;
 
     @PostMapping("/sendMessage")
     public String sendMessage(HttpServletRequest request,@ModelAttribute("messageForm") @Valid FirstMessageDto messageForm,
@@ -42,12 +41,10 @@ public class MessageSendController {
             log.info("Ошибок нет");
             user = (User) request.getSession().getAttribute("user");
             log.info(user.toString());
-
             userTo = userService.getUserByEmail(messageForm.getUser());
             message = Message.builder().idFrom(user.getId()).idTo(userTo.getId()).time(new Timestamp(System.currentTimeMillis())).message(messageForm.getMessage()).build();
             log.info("Сообщение : {}",message.toString());
             messageService.sendMessage(message);
-            /*model.addAttribute("messageForm", messageForm);*/
             log.info("Введенные данные коректны, иду дальше");
             return "redirect:/user/selfProfile";
         }else {

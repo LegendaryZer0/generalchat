@@ -8,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import sb.rf.generalchat.config.AppConfig;
 import sb.rf.generalchat.config.LocalizationConfig;
-import sb.rf.generalchat.security.config.SecurityConfig;
+import sb.rf.generalchat.security.config.SecurityBasicConfig;
 import sb.rf.generalchat.security.config.StatelessSecurityConfig;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -20,7 +20,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Collections;
 
-@Import({AppConfig.class, SecurityConfig.class, LocalizationConfig.class, StatelessSecurityConfig.class})
+@Import({AppConfig.class, SecurityBasicConfig.class, LocalizationConfig.class, StatelessSecurityConfig.class})
 @SpringBootApplication
 @EnableSwagger2
 public class GeneralchatApplication {

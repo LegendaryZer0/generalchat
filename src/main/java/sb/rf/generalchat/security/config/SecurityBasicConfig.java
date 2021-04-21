@@ -29,7 +29,7 @@ import javax.sql.DataSource;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @PropertySource("classpath:application.properties")
 @Order(2)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityBasicConfig extends WebSecurityConfigurerAdapter {
 
 
     @Autowired
@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         try {
             auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalStateException(e);
 
         }
 
@@ -80,7 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().rememberMe().rememberMeParameter("remember_me").tokenRepository(persistentTokenRepository())
                 .and().csrf()
                 .ignoringAntMatchers("/account/**","/authenticate/**")
-             /*   .and().authorizeRequests()*/
+
 
 
         ;

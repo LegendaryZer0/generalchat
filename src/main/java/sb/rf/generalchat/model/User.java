@@ -2,7 +2,6 @@ package sb.rf.generalchat.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Type;
 
@@ -19,13 +18,12 @@ import java.util.Set;
 @Table(name = "account")
 @DynamicUpdate
 public class User implements Serializable {
- /*   private static final long serialVersionUID = 3493239893284L;*/
 
-    @Column(name = "email", nullable = false,unique = true)
+
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
 
-    @Basic
     @Column(name = "password", nullable = false)
     private String password;
     @Id
@@ -34,10 +32,9 @@ public class User implements Serializable {
     @Type(type = "long")
     private Long id;
 
-    @Basic
     @Column(name = "nickname", nullable = true)
     private String nickname;
-    @Basic
+
     @Column(name = "phone")
     private String phone;
     @ToString.Exclude
@@ -50,7 +47,7 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "userByIdTo", fetch = FetchType.EAGER)
     private Set<Chats> chatsById_0;
-    @OneToOne(mappedBy = "userId", fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToOne(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     @JsonIgnore
     private TechnicalInfo technicalInfo;
@@ -60,18 +57,10 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private State state;
 
-    public enum Role{
-        ADMIN,USER,MODERATOR
-    }
-    public enum State{
-        ACTIVE,BANNED,FROZEN
-    }
     @Transient
-    public boolean isActive(){
+    public boolean isActive() {
         return this.getState().toString().equals("ACTIVE");
     }
-
-
 
     @Override
     public boolean equals(Object o) {
@@ -87,24 +76,13 @@ public class User implements Serializable {
     }
 
 
-/*    public List<Chats> getChatsById() {
-        return chatsById;
+    public enum Role {
+        ADMIN, USER, MODERATOR
     }
 
-    public void setChatsById(List<Chats> chatsById) {
-        this.chatsById = chatsById;
-    }*/
-
-/*
-
-    public List<Chats> getChatsById_0() {
-        return chatsById_0;
+    public enum State {
+        ACTIVE, BANNED, FROZEN
     }
-
-    public void setChatsById_0(List<Chats> chatsById_0) {
-        this.chatsById_0 = chatsById_0;
-    }
-*/
 
 
 }

@@ -13,22 +13,14 @@ import java.util.UUID;
 @Data
 @Entity
 @IdClass(ChatsPK.class)
-/*@TypeDef(
-        name = "list-array",
-        typeClass = ListArrayType.class
-)*/
+
 public class Chats implements Serializable {
-   /* private static final long serialVersionUID = 34932398932845L;*/
+
    @Id
    @Column(name = "id_from", nullable = false)
     private Long idFrom;
 
     @Id
- /*   @Type( type = "list-array" )
-    @Column(
-            name = "id_to",
-            columnDefinition = "bigint[]"
-    )*/
     @Column(name = "id_to" )
     private Long idTo;
 

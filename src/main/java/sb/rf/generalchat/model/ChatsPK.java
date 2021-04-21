@@ -13,21 +13,13 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 @Data
-/*@TypeDef(
-        name = "list-array",
-        typeClass = ListArrayType.class
-)*/
+
 public class ChatsPK implements Serializable {
 
     @Column(name = "id_from", nullable = false)
     @Id
     private Long idFrom;
     @Id
-/*   *//* @Type( type = "list-array" *//*)*/
-   /* @Column(
-            name = "id_to",
-            columnDefinition = "bigint[]"
-    )*/
     @Column(name = "id_to" )
     private Long idTo;
 

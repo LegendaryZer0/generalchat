@@ -1,5 +1,5 @@
 package sb.rf.generalchat.service;
 
-public interface IMailService {
+public interface MailService {
 
 }

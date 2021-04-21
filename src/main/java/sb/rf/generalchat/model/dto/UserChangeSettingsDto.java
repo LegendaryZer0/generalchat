@@ -25,7 +25,7 @@ public class UserChangeSettingsDto {
     private String email;
 
     private String password;
-    /*private String name;*/
+
 
     private String phone;
 
