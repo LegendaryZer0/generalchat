@@ -40,7 +40,7 @@
                 <h3><@spring.message 'sign_in_page.sign_in.title'/></h3>
                 <div class="d-flex justify-content-end social_icon">
                     <span><i   class="fab fa-facebook-square"></i></span>
-                    <span onclick="location.href=<@spring.url '/login/oath2/code/google' />"><i class="fab fa-google-plus-square"></i></span>
+                    <span onclick="location.href='http://localhost:8080/oauth2/authorization/google'"><i class="fab fa-google-plus-square"></i></span>
                     <span><i class="fab fa-twitter-square"></i></span>
                 </div>
             </div>
@@ -67,7 +67,7 @@
                         <input type="checkbox" id="chex" name="chex" value="true"><@spring.message 'sign_in_page.rememberMe.title'/>
                     </div>
                     <div class="form-group">
-                        <input id="submit" type="submit" value=<@spring.message 'sign_in_page.login.title'/> class="btn float-right login_btn">
+                        <input id="submit" type="submit" value="<@spring.message 'sign_in_page.login.title'/>" class="btn float-right login_btn" />
                     </div>
                 </form>
             </div>

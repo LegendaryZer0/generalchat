@@ -7,6 +7,9 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.stereotype.Component;
+
+import javax.persistence.criteria.CriteriaBuilder;
+
 @Slf4j
 @Component
 public class HandShakeInterceptor implements ChannelInterceptor {
@@ -16,6 +19,7 @@ public class HandShakeInterceptor implements ChannelInterceptor {
                 MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
         log.info(accessor.getCommand().toString());
         log.info("Session id is {}, and  message is {}",accessor.getSessionId(),accessor.getMessage());
+        log.info("Destination {}  , recepeit {} ,  user {}",accessor.getDestination(),accessor.getReceipt(),accessor.getUser());
 
         return message;
     }

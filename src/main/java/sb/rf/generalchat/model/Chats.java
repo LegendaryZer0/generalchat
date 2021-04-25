@@ -13,7 +13,6 @@ import java.util.UUID;
 @Data
 @Entity
 @IdClass(ChatsPK.class)
-
 public class Chats implements Serializable {
 
    @Id

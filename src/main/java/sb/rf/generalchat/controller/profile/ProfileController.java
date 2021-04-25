@@ -6,20 +6,23 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import sb.rf.generalchat.model.User;
+import sb.rf.generalchat.model.YouTubeVideo;
+import sb.rf.generalchat.model.YoutubeSearchCriteria;
 import sb.rf.generalchat.model.dto.FirstMessageDto;
 import sb.rf.generalchat.model.dto.UserChangeSettingsDto;
 import sb.rf.generalchat.security.details.UserDetailsImpl;
 import sb.rf.generalchat.service.UserService;
+import sb.rf.generalchat.service.YouTubeService;
 import sb.rf.generalchat.util.AuthenticationFacade;
 
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Controller("ProfController")
@@ -32,6 +35,9 @@ public class ProfileController {
     @Autowired
     private AuthenticationFacade authenticationFacade;
 
+    @Autowired
+    private YouTubeService youTubeService;
+
 
     @GetMapping("/selfProfile")
 
@@ -43,6 +49,7 @@ public class ProfileController {
         request.getSession().setAttribute("user",user);
         model.addAttribute("messageForm", new FirstMessageDto());
         model.addAttribute("userSettingsForm", UserChangeSettingsDto.from(user));
+
         return "Profile";
     }
 
@@ -72,6 +79,23 @@ public class ProfileController {
             return "Profile";
         }
 
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/getVideos", method= RequestMethod.GET)
+    public List<YouTubeVideo> formSubmit(@Valid YoutubeSearchCriteria youtubeSearchCriteria, BindingResult bindingResult, Model model) {
+        //check for errors
+        if (bindingResult.hasErrors()) {
+            return new ArrayList<YouTubeVideo>();
+        }
+        log.info("Gotted youtube search criteria {}",youtubeSearchCriteria.toString());
+        log.info(youtubeSearchCriteria.getQueryTerm());
+        //get the list of YouTube videos that match the search term
+        List<YouTubeVideo> videos = youTubeService.fetchVideosByQuery(youtubeSearchCriteria.getQueryTerm());
+        log.info("Founded videos  {}", videos);
+        //get out
+        return videos;
     }
 
 

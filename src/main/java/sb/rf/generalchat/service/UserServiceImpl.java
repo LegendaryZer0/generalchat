@@ -3,6 +3,8 @@ package sb.rf.generalchat.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import sb.rf.generalchat.encryption.Ecnrypt;
 import sb.rf.generalchat.encryption.EncryptImpl;
@@ -55,6 +57,7 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
+
 
     public User getUserByEmail(User user) {
         try {
@@ -120,6 +123,17 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUsersForce(){
         return userRepository.findAll();
     }
+
+    @Override
+    public void processOAuthPostLogin(OAuth2User oauthUser) {
+
+        log.info("Now i need save , {}",oauthUser);
+        log.info("attributes  {}",oauthUser.getAttributes());
+        log.info("authorities {}",oauthUser.getAuthorities());
+        log.info("Name {}",oauthUser.getName());
+
+    }
+
     public Integer deleteUser(String email){
         return     userRepository.markUserAsDeleted(email);
     }

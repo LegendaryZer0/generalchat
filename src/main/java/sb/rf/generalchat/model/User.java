@@ -52,10 +52,24 @@ public class User implements Serializable {
     @JsonIgnore
     private TechnicalInfo technicalInfo;
 
+    @OneToOne(mappedBy = "account_user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    @JsonIgnore
+    private GoogleOpenIdUser googleOpenIdUser;
+
     @Enumerated(EnumType.STRING)
     private Role role;
     @Enumerated(EnumType.STRING)
     private State state;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar default LOCAL")
+    private Provider provider = Provider.LOCAL;
+
+    public enum Provider {
+        LOCAL, GOOGLE
+    }
+
 
     @Transient
     public boolean isActive() {

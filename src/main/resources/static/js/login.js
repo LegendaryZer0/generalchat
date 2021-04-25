@@ -66,6 +66,7 @@
                 console.log(data);
                 finData=data;
 
+
             /*    if(data.status===200) {
                     console.log("Показываю результат ajax")
                     $('#x').html(data);

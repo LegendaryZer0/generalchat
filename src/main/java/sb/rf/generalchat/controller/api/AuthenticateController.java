@@ -1,3 +1,4 @@
+/*
 package sb.rf.generalchat.controller.api;
 
 import lombok.extern.slf4j.Slf4j;
@@ -49,3 +50,4 @@ public class AuthenticateController {
         return ResponseEntity.ok(jwt);
     }
 }
+*/

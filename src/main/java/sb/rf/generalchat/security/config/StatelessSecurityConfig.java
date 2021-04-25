@@ -1,3 +1,4 @@
+/*
 package sb.rf.generalchat.security.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import sb.rf.generalchat.filter.JwtRequestFilter;
 import sb.rf.generalchat.security.handler.SignInFailHandler;
@@ -46,6 +48,7 @@ public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
         try {
+
             auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
         } catch (Exception e) {
             throw  new IllegalStateException(e);
@@ -57,11 +60,13 @@ public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception
     {
-        http.csrf().disable()
+        http.csrf().ignoringAntMatchers("/api/**","/authenticate/**").and()
                 .authorizeRequests()
+                .and().formLogin().disable().authorizeRequests()
                 .antMatchers("/api/**").hasAuthority("ADMIN")
         ;
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        .and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class).antMatcher("/api/**");
     }
 }
+*/

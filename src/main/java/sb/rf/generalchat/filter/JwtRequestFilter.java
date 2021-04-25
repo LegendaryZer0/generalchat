@@ -51,4 +51,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         log.info("jwtFilterEnndedHisWork");
         filterChain.doFilter(request,response);
     }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        return !request.getRequestURI().contains("/api");
+    }
 }

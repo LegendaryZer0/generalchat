@@ -33,13 +33,13 @@ public class Message  implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_from", referencedColumnName = "id", insertable = false,updatable = false)
     private User userByIdFrom;
-/*    @Enumerated(EnumType.STRING)
-    private MessageStatus messageStatus;*/ //Todo Stomp протокол
- /*   public enum MessageStatus {
+    @Enumerated(EnumType.STRING)
+    private MessageStatus messageStatus; //Todo Stomp протокол
+    public enum MessageStatus {
         RECEIVED, DELIVERED
-    }*/
+    }
 
-    @Basic
+
     @Column(name = "id_to", nullable = true)
     public Long getIdTo() {
         return idTo;

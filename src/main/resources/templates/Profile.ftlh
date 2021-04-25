@@ -17,6 +17,9 @@
           color: red;
       }
   </style>
+    <meta  name = "_csrf"  content = "${_csrf.token}" />
+    <! - имя заголовка по умолчанию - X-CSRF-TOKEN ->
+    <meta  name = "_csrf_header"  content = "${_csrf.headerName}" />
 </head>
 <body>
 
@@ -68,6 +71,7 @@
                             <li class="active"><a href="#detail" data-toggle="tab">О пользователе</a></li>
                             <li class=""><a href="#contact" data-toggle="tab">Отправить сообщение</a></li>
                             <li class=""><a href="#settings" data-toggle="tab">Настройки профиля</a></li>
+                            <li class="youTube"><a href="#youtubeApi" data-toggle="tab">YouTube search</a></li>
                         </ul>
                         <a href = "<@spring.url '/user/messenger' />" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Мессенджер</a>
                         <div id="myTabContent" class="tab-content">
@@ -197,6 +201,50 @@
                                     </div>
                                 </form>
                             </div>
+
+
+                            <div class="tab-pane fade" id="youtubeApi">
+
+
+                                <form id="employeeForm" onsubmit="return false;" method="POST">
+                                    <div class="form-body">
+                                        <div>
+                                            <div class="mt-element-ribbon bg-grey-steel">
+                                                <div class="ribbon ribbon-color-success uppercase">Search Criteria</div>
+                                                <p class="ribbon-content">Please enter a keyword or phrase to search for.</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Search:</label>
+                                            <div>
+                                                <i  class="fa fa-exclamation tooltips" data-original-title="please enter a valid search term" data-container="body"></i>
+                                                <input type="text" class="form-control" id="YBSearchCriteria" maxlength="64" placeholder="For example: tom brady"/>
+                                                <span  class="help-block"></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="submit" id="youTubeSearch" class="btn blue">Search YouTube</button>
+                                    </div>
+                                </form>
+                                <div id="youTubeSearchResults">
+                                    <#--<div class="list-group">
+                                        <a href="#" class="list-group-item list-group-item-action active" >Active
+                                            item</a>
+                                        <a href="#" class="list-group-item list-group-item-action">Item</a>
+                                        <a href="#" class="list-group-item list-group-item-action disabled">Disabled
+                                            item</a>
+                                    </div>-->
+                                </div>
+
+
+                            </div>
+
+
+
+
                             <div class="tab-pane fade" id="messenger">
 
                             </div>
@@ -216,6 +264,7 @@
 <@b.bodyScript></@b.bodyScript>
 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 <script src="<@spring.url '/js/profile.js' />"></script>
+<script src="<@spring.url '/js/youtubeNativeSearch.js' />"></script>
 </script>
 
 
