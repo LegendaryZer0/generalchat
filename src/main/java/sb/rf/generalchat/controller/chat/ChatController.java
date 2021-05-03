@@ -1,6 +1,8 @@
 package sb.rf.generalchat.controller.chat;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -13,31 +15,22 @@ import sb.rf.generalchat.service.ChatService;
 import sb.rf.generalchat.service.MessageService;
 
 import java.util.UUID;
-
+@Slf4j
 @Controller
 public class ChatController {
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
     @Autowired
-    private MessageService chatMessageService;
+    private MessageService chatMessageService; //Todo не использовать 2 сервиса, а только 1
     @Autowired
     private ChatService chatRoomService;
 
-/*    @MessageMapping("/chat")
-    public void processMessage(@Payload MessagesDto chatMessage) {
-        var chatId = chatRoomService.getChatUUID(new Long[]{chatMessage.getFrom(),chatMessage.getTo()});
-
-        chatMessage.setChatId(chatId.get());
-
+    @MessageMapping("/chatroom/")
+    @SendTo("/chat/{uuid}")
+    public void processMessage(@Payload MessagesDto chatMessage,@DestinationVariable("uuid") String uuid) {
+        log.info("message: {}  uuid:  {}",chatMessage,uuid);
         chatMessageService.sendMessage(chatMessage.converToMessage());
-
-        messagingTemplate.convertAndSendToUser(
-                chatMessage.getIdTo(),"/queue/messages",
-                new ChatNotification(
-                        saved.getId(),
-                        saved.getSenderId(),
-                        saved.getSenderName()));
-    }*/
+    }
 
 }

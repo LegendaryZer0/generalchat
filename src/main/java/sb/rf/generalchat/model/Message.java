@@ -38,6 +38,11 @@ public class Message  implements Serializable {
     public enum MessageStatus {
         RECEIVED, DELIVERED
     }
+   /* @Enumerated(EnumType.STRING)
+    private MessageType messageType; //Todo Stomp протокол
+    public enum MessageType {
+        RECEIVED, DELIVERED
+    }*/
 
 
     @Column(name = "id_to", nullable = true)

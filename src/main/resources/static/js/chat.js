@@ -4,6 +4,7 @@ let main_id_to;
 let testJson;
 let socket;
 let url;
+let data;
 let xhr = new XMLHttpRequest();
 $(document).ready(function () {
     $('#action_menu_btn').click(function () {
@@ -30,6 +31,11 @@ $(document).ready(function () {
         console.log(data);
         socket.send(JSON.stringify(data));
 
+        console.log("Try to send test stomp messgae")
+     /*   connectWithStomp(url);
+        sendNameWithStomp();
+        disconnectWithStomp();*/
+        console.log("Disconnected from stomp")
 
         $('#messageBox').append(" <div class=\"d-flex justify-content-start mb-4\">\n" +
             "                        <div class=\"img_cont_msg\">\n" +
@@ -88,35 +94,6 @@ function  getUrl(id_from,id_to) {
         }
     });
     let json = JSON.stringify(data);
- /*/!*   xhr.setRequestHeader(header, token);*!/
-    xhr.open("POST", 'giveUrl', false)
-    xhr.setRequestHeader(header, token);
-    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-
-    console.log("TOKEN and header  " +token+ "  "+ header )
-
-    xhr.onreadystatechange = function() {
-        url =JSON.parse(JSON.stringify(this.responseText));
-        return url ;
-    }
-    xhr.setRequestHeader(header, token);
-    xhr.send(json);*/
-   /* $.ajax({
-        async:false,
-        type: 'POST',
-        url: 'giveUrl',
-        data: json,
-        beforeSend(xhr){
-            xhr.setRequestHeader(header, token);
-            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-        },
-        success: function (data){
-            console.log("data from new ajax" + data)
-            console.log("parsed date from new ajax" + JSON.parse(JSON.stringify(data)))
-            return JSON.parse(JSON.stringify(data));
-        }
-
-    });*/
 
 
 
@@ -132,6 +109,7 @@ function changeChat(id_from, id_to, nick) {
     let uuidUrl =getUrl(id_from,id_to);
     console.log("UUID url")
     console.log(uuidUrl);
+    console.log("URL")
     console.log(url);
 
 
@@ -263,8 +241,8 @@ function loadMesages(id_from, id_to) {
                 }
             })
             //on success show something to the user
-            //data is the html returned from the calling page, in your case the servlet
-            //put the html in the correct place
+            //             //data is the html returned from the calling page, in your case the servlet
+            //             //put the html in the correct place
         },
         /* error: function () {
              //show some error message here
@@ -272,6 +250,42 @@ function loadMesages(id_from, id_to) {
     });
 
 }
+
+
+
+/*
+function connectWithStomp( uuid){
+    //создание сокета, говорим к какому url-у подключаемся
+    let socket= new SockJS('wsstomp');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({},function (frame){
+        setConnected(true);
+        console.log('Connected'+frame);
+        stompClient.subscribe('/topic/'+uuid,function(greeting) {
+            console.log('greeting is' + greeting);
+        });
+
+
+    });
+};
+
+function disconnectWithStomp() {
+    if (stompClient !== null) {
+        stompClient.disconnect();
+    }
+    setConnected(false);
+    console.log("Disconnected");
+}
+
+function sendNameWithStomp() {
+    //stompClient.send("/app/hello", {}, $("#name").val());
+    // stompClient.send("/topic/chat", {}, $("#name").val());
+    stompClient.send("/app/chatroom", {}, data);
+}
+*/
+
+
+
 
 
 

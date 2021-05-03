@@ -38,6 +38,8 @@ public class GoogleOidcServiceImpl implements GoogleOidcService{
     @Qualifier("activeUserDetailsService")
     @Autowired
     private UserDetailsService userDetailsService;
+    @Autowired
+    private MessageService messageService;
 
 
     @Override
@@ -66,8 +68,11 @@ public class GoogleOidcServiceImpl implements GoogleOidcService{
                                         .confirmState(TechnicalInfo.ConfirmState.CONFIRMED)
                                         .build())
                                 .build()).build();
-                googleOidcRepo.save(googleOpenIdUser);
+
+                GoogleOpenIdUser googleUser =googleOidcRepo.save(googleOpenIdUser);
+                messageService.sendWelcomeMessage(googleUser.getAccount_user().getId());
                 setAuthenticationForce(googleOpenIdUser,request);
+
             }else { //Todo убрать этот тихий ужас
                 //юзер есть, но он когда-то поменял email
                 googleOpenIdUserFromRepo.get().getAccount_user().setEmail(oidcUser.getEmail());

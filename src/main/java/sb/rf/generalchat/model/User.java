@@ -62,15 +62,6 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private State state;
 
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "varchar default LOCAL")
-    private Provider provider = Provider.LOCAL;
-
-    public enum Provider {
-        LOCAL, GOOGLE
-    }
-
-
     @Transient
     public boolean isActive() {
         return this.getState().toString().equals("ACTIVE");

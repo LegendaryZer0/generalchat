@@ -1,6 +1,7 @@
-/*
 package sb.rf.generalchat.security.config;
 
+import org.hibernate.internal.SessionFactoryImpl;
+import org.hibernate.query.criteria.internal.CriteriaBuilderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +13,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.socket.AbstractSecurityWebSocketMessageBrokerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
@@ -20,6 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import sb.rf.generalchat.filter.JwtRequestFilter;
 import sb.rf.generalchat.security.handler.SignInFailHandler;
 
+import javax.persistence.criteria.Expression;
 import javax.sql.DataSource;
 
 @Configuration
@@ -60,6 +64,7 @@ public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception
     {
+
         http.csrf().ignoringAntMatchers("/api/**","/authenticate/**").and()
                 .authorizeRequests()
                 .and().formLogin().disable().authorizeRequests()
@@ -69,4 +74,3 @@ public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter {
         .and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class).antMatcher("/api/**");
     }
 }
-*/

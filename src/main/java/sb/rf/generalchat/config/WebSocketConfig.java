@@ -33,7 +33,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
 
         // сюда можно подключаться вебсокет-клиентам (stomp-клиент)
-        registry.addEndpoint("/ws").setAllowedOrigins("*").withSockJS();  // адрес, куда клиенты будут подключатся
+        registry.addEndpoint("/wsstomp").setAllowedOrigins("*").withSockJS();  // адрес, куда клиенты будут подключатся
     }
 
 

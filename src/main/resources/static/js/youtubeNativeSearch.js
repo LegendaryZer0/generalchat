@@ -27,6 +27,7 @@ $(document).ready(function () {
                     finData +="<a href="+ "https://www.youtube.com/watch?v="+ data['items'][video]['id']['videoId']  +" class=\"list-group-item list-group-item-action active\">"+ data['items'][video]['snippet']['title'] +"\n" +
                         "       <img alt=\"\"src="+ data['items'][video]['snippet']['thumbnails']['default']['url'] + " />                                    </a>"+
                         "<p >"+data['items'][video]['snippet']['description']+"</p>"
+                    +"<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/"+data['items'][video]['id']['videoId']+"\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>"
                 }
                 console.log('Findata :')
                 console.log(finData)

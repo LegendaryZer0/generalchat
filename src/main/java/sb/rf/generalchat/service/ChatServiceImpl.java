@@ -35,7 +35,7 @@ public class ChatServiceImpl implements ChatService {
             log.info("ChatRepository {}",chatsRepository);
             log.info("Pair {}", Arrays.toString(pair));
             log.info("pair {},  chatroomUUID {}",pair, chatsRepository.getChatroomUUIDForTwoUsers(pair[1], pair[0]));
-            return chatsRepository.getChatroomUUIDForTwoUsers(pair[0], pair[1]);
+            return chatsRepository.getChatroomUUIDForTwoUsers(pair[0], pair[1]).stream().findFirst().get();
         }catch (Exception e){
             throw new IllegalStateException(e);
         }

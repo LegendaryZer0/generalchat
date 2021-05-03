@@ -34,7 +34,7 @@ import sb.rf.generalchat.service.UserService;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @PropertySource("classpath:application.properties")
 @Order(2)
@@ -57,11 +57,11 @@ public class SecurityBasicConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService;
 
-    @Bean
+ /*   @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
+*/
 
     @Autowired
     private GoogleOidcService service;
@@ -106,7 +106,7 @@ public class SecurityBasicConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .userInfoEndpoint()
                 .oidcUserService(oidcUserService)
-                /*.userService(oauthUserService)*/
+                .userService(oauthUserService)
                 .and()
                 .successHandler((request, response, authentication) -> {
 

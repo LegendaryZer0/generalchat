@@ -1,10 +1,11 @@
-/*
 package sb.rf.generalchat.controller.api;
 
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,6 +39,8 @@ public class AuthenticateController {
         try{
             log.info("user ti authenticate {}",userLoginDto);
             log.info("authentic manager {}",authenticationManager);
+
+
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userLoginDto.getLogin(),userLoginDto.getPassword()));
 
@@ -50,4 +53,3 @@ public class AuthenticateController {
         return ResponseEntity.ok(jwt);
     }
 }
-*/

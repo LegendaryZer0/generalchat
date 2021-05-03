@@ -4,8 +4,7 @@
     $('#submit').click(function () {
         var login = $('#login').val();
         var password =$('#password').val();
-        let csrf = $('#csrf-token').val();
-        console.log("csr token from hidden input" +csrf)
+
         let chex;
         if($('#chex').is(':checked')){
             chex=true;
@@ -15,6 +14,8 @@
 
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
+        console.log(token);
+        console.log(header);
         console.log(chex)
         let sendData ={
             email: login,
