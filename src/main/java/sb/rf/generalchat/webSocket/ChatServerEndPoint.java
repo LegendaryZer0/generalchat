@@ -26,23 +26,20 @@ import java.util.concurrent.CopyOnWriteArraySet;
 )
 @Component
 public class ChatServerEndPoint {
-    private ApplicationContext applicationContext /*= new ClassPathXmlApplicationContext("WEB-INF/dispatcherServlet-servlet.xml")*/;
-    private static final Set<ChatServerEndPoint> sessionsSet
+    private static final Set<ChatServerEndPoint> sessionsEndpointsSet
             = new CopyOnWriteArraySet<>();
 
-   /* @Qualifier("userService")*/
-/*    private  UserService userServiceStatic*//*=applicationContext.getBean("userServiceImpl",UserService.class)*//*;*/
+
+
+
+    private static UserService userService;
+    private static MessageService messageService;
+
     @Autowired
     public  void setUserService(UserService userService) {
         ChatServerEndPoint.userService = userService;
     }
 
-
-    private static UserService userService;
-
-   /* @Qualifier("messageService")*/
-      //Todo разобраться с autowired
-    private static MessageService messageService/*= applicationContext.getBean("messageServiceImpl",MessageService.class);*/;
     @Autowired
     public  void setMessageService(MessageService messageService) {
         ChatServerEndPoint.messageService = messageService;
@@ -58,18 +55,17 @@ public class ChatServerEndPoint {
 
     }
 
-    /* private static HashMap<String, String> users = new HashMap<>();*/
 
     @OnOpen
     public void onOpen(
             Session session,
-            @PathParam("hash") String hash/*,@PathParam("")String id_from,@PathParam("") String id_to*/) throws IOException {
+            @PathParam("hash") String hash)  {
         this.session = session;
         sessionId = hash;
 
 
-        sessionsSet.add(this);
-        log.info("Сессия открыта сессий всего {}", sessionsSet.size());
+        sessionsEndpointsSet.add(this);
+        log.info("Сессия открыта сессий всего {}", sessionsEndpointsSet.size());
         log.info("Идентификатор сессии{}", hash);
         log.info("Сервисы инициализированы {}   {} ",messageService,userService);
 
@@ -77,10 +73,10 @@ public class ChatServerEndPoint {
 
     @OnMessage
     public void onMessage(Session session, MessagesDto message) {
-        log.info("Количество сессий на момент отпр сообщ {}", sessionsSet.size());
+        log.info("Количество сессий на момент отпр сообщ {}", sessionsEndpointsSet.size());
         log.info("Сообщение в onMessage перед отправкой  {}", message.toString());
         messageService.sendMessage(message.converToMessage());
-        sessionsSet.stream().forEach(x -> {
+        sessionsEndpointsSet.stream().forEach(x -> {
             try {
                 log.info(message.toString());
                 if (!session.equals(x.session) && this.sessionId.equals(x.sessionId)) {
@@ -96,8 +92,8 @@ public class ChatServerEndPoint {
     @OnClose
     public void onClose(Session session) {
 
-        sessionsSet.remove(this);
-        log.info("Сессий после закрытия {}", sessionsSet.size());
+        sessionsEndpointsSet.remove(this);
+        log.info("Сессий после закрытия {}", sessionsEndpointsSet.size());
 
     }
 

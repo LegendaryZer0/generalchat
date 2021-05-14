@@ -66,6 +66,7 @@ public class YouTubeService {
                     YouTubeVideo video = new YouTubeVideo();
                     video.setTitle(result.getSnippet().getTitle());
                     video.setUrl(buildVideoUrl(result.getId().getVideoId()));
+
                     video.setThumbnailUrl(result.getSnippet().getThumbnails().getDefault().getUrl());
                     video.setDescription(result.getSnippet().getDescription());
 

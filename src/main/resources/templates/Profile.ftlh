@@ -229,6 +229,7 @@
                                         <button type="submit" id="youTubeSearch" class="btn blue">Search YouTube</button>
                                     </div>
                                 </form>
+
                                 <div id="youTubeSearchResults">
                                     <#--<div class="list-group">
                                         <a href="#" class="list-group-item list-group-item-action active" >Active
@@ -264,7 +265,7 @@
 <@b.bodyScript></@b.bodyScript>
 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 <script src="<@spring.url '/js/profile.js' />"></script>
-<script src="<@spring.url '/js/youtubeNativeSearch.js' />"></script>
+<script src="<@spring.url '/js/youtubeSearch.js' />"></script>
 </script>
 
 

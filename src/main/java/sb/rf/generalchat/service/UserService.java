@@ -9,13 +9,14 @@ import sb.rf.generalchat.security.oauth2.CustomOAuth2User;
 import sb.rf.generalchat.security.oauth2.CustomOidcUser;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
     public List<User> findAllUsersChats(long id);
     public User updateUser(User user);
 
     public User getUserById(long id);
-    public User getUser(String login, String password);
+    public Optional<User> getUser(String login, String password);
     public User getUserByEmail(User user);
     public User addUser(User user);
     public void confirmEmail(long id);

@@ -1,14 +1,35 @@
 package sb.rf.generalchat.security.authentication;
 
+import lombok.ToString;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
+import java.util.Collections;
+@ToString
+public class JWTAuthentication implements Authentication {
 
-public class JWTTokenAuth implements Authentication {
+
+    private boolean isAuthenticated;
+
+    private final String token;
+
+    private String authority;
+
+
+    public JWTAuthentication(String token) {
+        this.token = token;
+    }
+
+    public void setAuthority(String authority) {
+        this.authority = authority;
+    }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return  Collections.singleton(new SimpleGrantedAuthority(authority));
     }
 
     @Override
@@ -28,16 +49,16 @@ public class JWTTokenAuth implements Authentication {
 
     @Override
     public boolean isAuthenticated() {
-        return false;
+        return isAuthenticated;
     }
 
     @Override
     public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
-
+            this.isAuthenticated = isAuthenticated;
     }
 
     @Override
     public String getName() {
-        return null;
+        return token;
     }
 }

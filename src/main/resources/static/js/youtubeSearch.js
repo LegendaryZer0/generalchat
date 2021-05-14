@@ -24,9 +24,13 @@ $(document).ready(function () {
                 for (let video in data){
                     console.log("video is:")
                     console.log(data[video])
+                    console.log("embeded url is")
+                    console.log(data[video]['url'].split("https://www.youtube.com/watch?v="));
+                    console.log(data[video]['url'].toString().split("v="))
                     finData +="<a href="+  data[video]['url']  +" class=\"list-group-item list-group-item-action active\">"+ data[video]['title'] +"\n" +
                         "       <img alt=\"\"src="+ data[video]['thumbnailUrl'] + " />                                    </a>"+
                         "<p >"+data[video]['description']+"</p>"
+                        +"<iframe width=\"700\" height=\"315\" src=\"https://www.youtube.com/embed/"+data[video]['url'].split("https://www.youtube.com/watch?v=")[1]+"\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>"
                 }
                 console.log('Findata :')
                 console.log(finData)

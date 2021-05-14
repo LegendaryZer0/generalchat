@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.mobile.device.Device;
+import org.springframework.mobile.device.DeviceResolver;
 import org.springframework.web.bind.annotation.*;
 import sb.rf.generalchat.model.User;
 import sb.rf.generalchat.model.dto.RegistrationDto;
@@ -35,6 +37,8 @@ public class AccountController {
     @ApiOperation(notes = "Not deleted user, just marked him as Deleted" ,value = "Delete user by email",response = Integer.class)
     @DeleteMapping("/account/{user_email}")
     public ResponseEntity<Integer> deleteUserByEmail(@PathVariable("user_email") String email){
+        
+
         return ResponseEntity.ok(userService.deleteUser(email));
     }
 

@@ -3,11 +3,9 @@ package sb.rf.generalchat.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import sb.rf.generalchat.encryption.Ecnrypt;
-import sb.rf.generalchat.encryption.EncryptImpl;
 import sb.rf.generalchat.model.User;
 import sb.rf.generalchat.repository.UserJpaRepository;
 import sb.rf.generalchat.util.EmailUtil;
@@ -15,14 +13,15 @@ import sb.rf.generalchat.util.MailsGenerator;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserJpaRepository userRepository;
-
-    private final Ecnrypt cipher = new EncryptImpl();
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private MailsGenerator mailsGenerator;
 
@@ -42,7 +41,7 @@ public class UserServiceImpl implements UserService {
     }
     public User addUser(User user) {
         try {
-            user.setPassword(cipher.encrypt(user.getPassword()));
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             log.info("reg user, {}",user);
             if (userRepository.getUserByEmail(user.getEmail()).isEmpty()) {
                 user=userRepository.save(user);
@@ -69,17 +68,17 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public User getUser(String login, String password) {
+    public Optional<User> getUser(String login, String password) {
         try {
             User user = userRepository.getUserByEmail(login).get();
             log.info("entered password,{} " ,password);
             log.info("User from db{}",user);
-            if (cipher.check(password, user.getPassword())) {
-                return user;
-            } else return new User();
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                return Optional.of(user);
+            } else return Optional.empty();
         } catch (Exception e) {
             e.printStackTrace();
-            return new User();
+            return Optional.empty();
         }
 
     }
@@ -110,7 +109,7 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
             return user;
         }
-        user.setPassword(cipher.encrypt(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return user;
 
