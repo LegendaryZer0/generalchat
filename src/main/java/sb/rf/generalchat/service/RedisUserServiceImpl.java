@@ -1,6 +1,7 @@
 package sb.rf.generalchat.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.util.Pair;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
@@ -24,9 +25,9 @@ public class RedisUserServiceImpl implements RefreshTokenService {
 
         String newRefreshToken = rotateToken(oldRefreshToken, deviceName).orElseThrow(() -> new BadCredentialsException("Malicious user taked token!"));
 
-        String accesToken = apiAuthService.generateAccessToken(jwtUtil.extractUsername(accessToken));
+        String newAccessToken = apiAuthService.generateAccessToken(jwtUtil.extractUsername(accessToken));
 
-        return Pair.of(accessToken, newRefreshToken);
+        return Pair.of(newAccessToken, newRefreshToken);
 
     }
 

@@ -7,14 +7,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
@@ -29,14 +27,13 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import sb.rf.generalchat.security.handler.SignInFailHandler;
 import sb.rf.generalchat.security.oauth2.service.CustomOAuth2UserService;
 import sb.rf.generalchat.service.GoogleOidcService;
-import sb.rf.generalchat.service.UserService;
 
 import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application-local.properties")
 @Order(2)
 @Slf4j
 public class SecurityBasicConfig extends WebSecurityConfigurerAdapter {

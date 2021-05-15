@@ -7,7 +7,6 @@ import sb.rf.generalchat.model.Chats;
 import sb.rf.generalchat.model.Message;
 import sb.rf.generalchat.repository.ChatsRepository;
 import sb.rf.generalchat.repository.MessageRepository;
-;
 
 import java.sql.Timestamp;
 import java.util.Comparator;
@@ -17,13 +16,13 @@ import java.util.UUID;
 @Slf4j
 @Service
 public class MessageServiceImpl implements MessageService {
-    private MessageRepository messageRepo;
-    private UserService userService;
+    private final MessageRepository messageRepo;
+    private final UserService userService;
 
-    private ChatsRepository chatsRepository;
+    private final ChatsRepository chatsRepository;
 
     @Value("${welcome.message}")
-    private   String WELCOME_MESSAGE;
+    private String WELCOME_MESSAGE;
 
 
     public MessageServiceImpl(MessageRepository messageRepo, UserService userService, ChatsRepository repository) {
@@ -33,16 +32,15 @@ public class MessageServiceImpl implements MessageService {
     }
 
     public void sendMessage(Message message) {
-        /*User from = userService.getUserById();
-        User to = userService.getUserById();*/
+
         message.setIdFrom(message.getIdFrom());
         message.setIdTo(message.getIdTo()); //Todo протестить
-        log.info("Соханияю сообщение {}",message);
+        log.info("Соханияю сообщение {}", message);
         messageRepo.save(message);
-        Chats chat =chatsRepository.save(Chats.builder().idFrom(message.getIdFrom())
+        Chats chat = chatsRepository.save(Chats.builder().idFrom(message.getIdFrom())
                 .idTo(message.getIdTo())
                 .uuid(UUID.randomUUID()).build());
-        log.info("created chat {}",chat);
+        log.info("created chat {}", chat);
     }
 
 
@@ -53,20 +51,21 @@ public class MessageServiceImpl implements MessageService {
     }
 
     public List<Message> getAllMessagesBetweenTwoUsers(long id_From, long id_to) {
-        log.info("Messagerepo {}",messageRepo);
+        log.info("Message repo {}", messageRepo);
         List<Message> messagesFrom = messageRepo.findAllByIdFromAndIdTo(id_From, id_to);
-        if(id_From!=id_to) {
+        if (id_From != id_to) {
             List<Message> messagesTo = messageRepo.findAllByIdFromAndIdTo(id_to, id_From);
             messagesFrom.addAll(messagesTo);
-            log.info("messagesFrom and to  from: {} to:  {}",messagesFrom, messagesTo);
+            log.info("messagesFrom and to  from: {} to:  {}", messagesFrom, messagesTo);
         }
         messagesFrom.sort(Comparator.comparing(Message::getTime));
         log.info(messagesFrom.toString());
 
         return messagesFrom;
     }
+
     @Override
-    public void sendWelcomeMessage(Long user_id){
+    public void sendWelcomeMessage(Long user_id) {
         log.info("WELCOME MESSAGE {}", WELCOME_MESSAGE);
         this.sendMessage(Message.builder().idTo(user_id)
                 .idFrom(user_id)

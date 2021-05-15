@@ -30,7 +30,7 @@ import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity(debug = true)
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application-local.properties")
 @Order(1)
 @Slf4j
 public class OAuth2SecurityConfig  extends WebSecurityConfigurerAdapter {
