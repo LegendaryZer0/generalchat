@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import sb.rf.generalchat.repository.ChatsRepository;
 import sb.rf.generalchat.repository.UserJpaRepository;
 
-
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -17,9 +16,11 @@ public class ChatServiceImpl implements ChatService {
     private UserJpaRepository userRepository;
     private UUID uuid;
     private ChatsRepository chatsRepository;
+
     public ChatServiceImpl() {
 
     }
+
     @Autowired
     public ChatServiceImpl(UserJpaRepository userRepository, ChatsRepository repository) {
         super();
@@ -32,11 +33,11 @@ public class ChatServiceImpl implements ChatService {
         Arrays.sort(pair);
         log.info("started gettingChatUUID");
         try {
-            log.info("ChatRepository {}",chatsRepository);
+            log.info("ChatRepository {}", chatsRepository);
             log.info("Pair {}", Arrays.toString(pair));
-            log.info("pair {},  chatroomUUID {}",pair, chatsRepository.getChatroomUUIDForTwoUsers(pair[1], pair[0]));
+            log.info("pair {},  chatroomUUID {}", pair, chatsRepository.getChatroomUUIDForTwoUsers(pair[1], pair[0]));
             return chatsRepository.getChatroomUUIDForTwoUsers(pair[0], pair[1]).stream().findFirst().get();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new IllegalStateException(e);
         }
 

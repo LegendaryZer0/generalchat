@@ -35,7 +35,7 @@ public class MessageServiceImpl implements MessageService {
 
         message.setIdFrom(message.getIdFrom());
         message.setIdTo(message.getIdTo()); //Todo протестить
-        log.info("Соханияю сообщение {}", message);
+        log.info("Save message {}", message);
         messageRepo.save(message);
         Chats chat = chatsRepository.save(Chats.builder().idFrom(message.getIdFrom())
                 .idTo(message.getIdTo())

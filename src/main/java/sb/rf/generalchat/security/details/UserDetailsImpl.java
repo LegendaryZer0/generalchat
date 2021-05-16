@@ -17,10 +17,11 @@ import java.util.Collections;
 public class UserDetailsImpl implements UserDetails {
 
     private User user;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().toString());
-        log.info("AUTHORITY -> {}",authority.getAuthority());
+        log.info("AUTHORITY -> {}", authority.getAuthority());
         return Collections.singleton(authority);
 
     }
@@ -42,7 +43,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        log.info("ARE USER ACtIVE ? {}",user.isActive());
+        log.info("ARE USER ACtIVE ? {}", user.isActive());
         return user.isActive();
     }
 

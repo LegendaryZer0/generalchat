@@ -62,7 +62,7 @@ public class MessengerController {
 
 
     @GetMapping("/messenger")
-    public String getAllUsersChats(HttpServletResponse response, HttpServletRequest request){
+    public String getAllUsersChats( HttpServletRequest request){
         user = sessionUserInfo.getCurrentUser();
         log.info("user : {}",user);
         log.info("user service is {}",userService);

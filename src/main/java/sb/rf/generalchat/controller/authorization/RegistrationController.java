@@ -33,7 +33,7 @@ public class RegistrationController {
     public String  registration(HttpServletResponse response, @Valid @RequestBody RegistrationDto dto, BindingResult result, HttpServletRequest request){
         if(!result.hasErrors()) {
             log.debug("Started registration {}", dto);
-            log.info("РЕГИСТРАЦИЯ: полученные пароль и логин{}, {}", dto.getPassword(), dto.getLogin());
+            log.info("REGISTRATION: given password : {}, login : {}", dto.getPassword(), dto.getLogin());
             User user =service.addUser(dto.getUser());
             if (user==null) {
                 return "please,reload page";
@@ -54,7 +54,7 @@ public class RegistrationController {
     @GetMapping("/registration")
     public ModelAndView getRegistration(HttpServletRequest request){
         ModelAndView modelAndView = new ModelAndView();
-        log.info(request.getSession().getAttribute("_csrf")+ "Предпологаемый csrf токен");
+        log.info(request.getSession().getAttribute("_csrf")+ "Expected csrf токен");
 
         modelAndView.setViewName("Registration");
         return modelAndView;

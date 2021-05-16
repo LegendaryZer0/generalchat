@@ -18,11 +18,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("users  email ::{}::!",username);
-        User user = userJpaRepository.getUserByEmail(username).orElseThrow(()->{
+        log.info("users  email ::{}::!", username);
+        User user = userJpaRepository.getUserByEmail(username).orElseThrow(() -> {
             log.info("Theres NO User in Db");
-          return   new UsernameNotFoundException("Usernot found");});
-        log.info("Loaded user {}",user);
+            return new UsernameNotFoundException("User not found");
+        });
+        log.info("Loaded user {}", user);
         return new UserDetailsImpl(user);
     }
 }

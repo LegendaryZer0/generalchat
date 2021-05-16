@@ -17,7 +17,6 @@ import java.util.concurrent.ExecutorService;
 public class EmailUtilImpl implements EmailUtil {
 
     @Autowired
-    /*@Qualifier(value = "javaMailSenderImp")*/
     @Setter
     @Getter
     private JavaMailSender javaMailSender;

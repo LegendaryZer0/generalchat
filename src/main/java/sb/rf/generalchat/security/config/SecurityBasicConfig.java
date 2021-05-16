@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
@@ -54,14 +53,10 @@ public class SecurityBasicConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService;
 
- /*   @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-*/
 
     @Autowired
     private GoogleOidcService service;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
         try {
@@ -108,17 +103,16 @@ public class SecurityBasicConfig extends WebSecurityConfigurerAdapter {
                 .successHandler((request, response, authentication) -> {
 
                     DefaultOidcUser oidcUser = (DefaultOidcUser) authentication.getPrincipal();
-                    log.info("oauthUser from config {}",oidcUser);
+                    log.info("oauthUser from config {}", oidcUser);
                     authentication.setAuthenticated(true);
-                    log.info("aouth principals before precess {}",authentication.getPrincipal());
-                    service.processOAuthPostLogin(oidcUser,request);
-                    log.info("aouth principals after precess {}",authentication.getPrincipal());
+                    log.info("aouth principals before precess {}", authentication.getPrincipal());
+                    service.processOAuthPostLogin(oidcUser, request);
+                    log.info("aouth principals after precess {}", authentication.getPrincipal());
 
                     response.sendRedirect("/user/selfProfile");
                 }).and()
                 .csrf()
-                .ignoringAntMatchers("/api/**","/authenticate/**")
-
+                .ignoringAntMatchers("/api/**", "/authenticate/**")
 
 
         ;

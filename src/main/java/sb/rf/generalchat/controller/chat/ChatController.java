@@ -22,7 +22,7 @@ public class ChatController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
     @Autowired
-    private MessageService chatMessageService; //Todo не использовать 2 сервиса, а только 1
+    private MessageService chatMessageService;
     @Autowired
     private ChatService chatRoomService;
 

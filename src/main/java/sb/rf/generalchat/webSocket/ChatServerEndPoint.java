@@ -2,15 +2,12 @@ package sb.rf.generalchat.webSocket;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-
 import sb.rf.generalchat.model.dto.MessagesDto;
 import sb.rf.generalchat.service.MessageService;
 import sb.rf.generalchat.service.UserService;
 import sb.rf.generalchat.webSocket.output.format.Decoder;
 import sb.rf.generalchat.webSocket.output.format.Encoder;
-
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -30,51 +27,48 @@ public class ChatServerEndPoint {
             = new CopyOnWriteArraySet<>();
 
 
-
-
     private static UserService userService;
     private static MessageService messageService;
+    private String sessionId;
+    private Session session;
+
+    public ChatServerEndPoint(UserService userService, MessageService messageService) {
+        this.userService = userService;
+        this.messageService = messageService;
+    }
+    public ChatServerEndPoint() {
+
+    }
 
     @Autowired
-    public  void setUserService(UserService userService) {
+    public void setUserService(UserService userService) {
         ChatServerEndPoint.userService = userService;
     }
 
     @Autowired
-    public  void setMessageService(MessageService messageService) {
+    public void setMessageService(MessageService messageService) {
         ChatServerEndPoint.messageService = messageService;
     }
-
-    private String sessionId;
-    private Session session;
-    public ChatServerEndPoint(UserService userService, MessageService messageService){
-        this.userService = userService;
-        this.messageService =messageService;
-    }
-    public ChatServerEndPoint(){
-
-    }
-
 
     @OnOpen
     public void onOpen(
             Session session,
-            @PathParam("hash") String hash)  {
+            @PathParam("hash") String hash) {
         this.session = session;
         sessionId = hash;
 
 
         sessionsEndpointsSet.add(this);
-        log.info("Сессия открыта сессий всего {}", sessionsEndpointsSet.size());
-        log.info("Идентификатор сессии{}", hash);
-        log.info("Сервисы инициализированы {}   {} ",messageService,userService);
+        log.info("The session is open to all {}", sessionsEndpointsSet.size());
+        log.info("Session ID {}", hash);
+        log.info("Services initializedы {}   {} ", messageService, userService);
 
     }
 
     @OnMessage
     public void onMessage(Session session, MessagesDto message) {
-        log.info("Количество сессий на момент отпр сообщ {}", sessionsEndpointsSet.size());
-        log.info("Сообщение в onMessage перед отправкой  {}", message.toString());
+        log.info("Number of sessions at the time of sending {}", sessionsEndpointsSet.size());
+        log.info("Message in onMessage before sending  {}", message.toString());
         messageService.sendMessage(message.converToMessage());
         sessionsEndpointsSet.stream().forEach(x -> {
             try {
@@ -93,7 +87,7 @@ public class ChatServerEndPoint {
     public void onClose(Session session) {
 
         sessionsEndpointsSet.remove(this);
-        log.info("Сессий после закрытия {}", sessionsEndpointsSet.size());
+        log.info("Sessions after onClose method {}", sessionsEndpointsSet.size());
 
     }
 

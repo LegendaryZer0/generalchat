@@ -13,7 +13,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String getLogin() {
-        log.info("Отдаю страницу логина");
+        log.info("Giving back the login page");
         return "Login";
     }
 

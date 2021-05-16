@@ -59,14 +59,14 @@ public class ProfileController {
        /* model.addAttribute("messageForm", new FirstMessageDto());*/
         if(!bindingResult.hasErrors()) {
             User userInSession = (User) request.getSession().getAttribute("user");
-            log.info("Ошибок нет");
+            log.info("No errors");
             User user = userSettingsForm.getUser();
             log.info("User in changeSettings Controller{}", user);
 
             user = userService.updateUser(user);
             if (user != null) {
                 request.getSession().setAttribute("user", user);
-                log.info("Всё прошло успешно, просто отдаю эту же страницу профиля");
+                log.info("All went well, just giving the same profile page");
                 return "redirect:/user/selfProfile";    //return Profile
             } else return "redirect:/user/selfProfile";//Todo пофиксить после правльного обновления данных
         }else {

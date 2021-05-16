@@ -11,7 +11,6 @@ import sb.rf.generalchat.repository.UserJpaRepository;
 import sb.rf.generalchat.util.EmailUtil;
 import sb.rf.generalchat.util.MailsGenerator;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +18,7 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
-    private UserJpaRepository userRepository;
+    private final UserJpaRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -36,21 +35,23 @@ public class UserServiceImpl implements UserService {
     private EmailUtil emailUtil;
 
     private User user;
+
     public UserServiceImpl(UserJpaRepository userRepository) {
         this.userRepository = userRepository;
     }
+
     public User addUser(User user) {
         try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            log.info("reg user, {}",user);
+            log.info("reg user, {}", user);
             if (userRepository.getUserByEmail(user.getEmail()).isEmpty()) {
-                user=userRepository.save(user);
+                user = userRepository.save(user);
             }
-            log.info("user repo log info by email {},",userRepository.getUserByEmail(user.getEmail()).get());
+            log.info("user repo log info by email {},", userRepository.getUserByEmail(user.getEmail()).get());
             String confirmMail = mailsGenerator.getEmailforConfirm(serverUrl, userRepository.getUserByEmail(user.getEmail()).get().getId());
             emailUtil.sendEmail(user.getEmail(), "Регистрация", from, confirmMail);
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -61,7 +62,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByEmail(User user) {
         try {
             return userRepository.getUserByEmail(user.getEmail()).get();
-        }catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
             return null;
         }
@@ -71,8 +72,8 @@ public class UserServiceImpl implements UserService {
     public Optional<User> getUser(String login, String password) {
         try {
             User user = userRepository.getUserByEmail(login).get();
-            log.info("entered password,{} " ,password);
-            log.info("User from db{}",user);
+            log.info("entered password,{} ", password);
+            log.info("User from db{}", user);
             if (passwordEncoder.matches(password, user.getPassword())) {
                 return Optional.of(user);
             } else return Optional.empty();
@@ -91,7 +92,7 @@ public class UserServiceImpl implements UserService {
     public List<User> findAllUsersChats(long id) {
         log.info("Users id");
         List<User> userList = userRepository.findAllUserChatsById(id);
-        log.info("all users chats :",userList);
+        log.info("all users chats :  {}", userList);
         return userList;
     }
 
@@ -110,31 +111,32 @@ public class UserServiceImpl implements UserService {
 
 
     }
-    public List<User> getAllUsers(){
-       return userRepository.getAllByTechnicalInfo_IsDeletedFalse();
+
+    public List<User> getAllUsers() {
+        return userRepository.getAllByTechnicalInfo_IsDeletedFalse();
     }
 
-    public List<User> getAllUsersForce(){
+    public List<User> getAllUsersForce() {
         return userRepository.findAll();
     }
 
     @Override
     public void processOAuthPostLogin(OAuth2User oauthUser) {
 
-        log.info("Now i need save , {}",oauthUser);
-        log.info("attributes  {}",oauthUser.getAttributes());
-        log.info("authorities {}",oauthUser.getAuthorities());
-        log.info("Name {}",oauthUser.getName());
+        log.info("Now i need save , {}", oauthUser);
+        log.info("attributes  {}", oauthUser.getAttributes());
+        log.info("authorities {}", oauthUser.getAuthorities());
+        log.info("Name {}", oauthUser.getName());
 
     }
 
-    public Integer deleteUser(String email){
-        return     userRepository.markUserAsDeleted(email);
+    public Integer deleteUser(String email) {
+        return userRepository.markUserAsDeleted(email);
     }
-    public void deleteUserForceById(Long id){
+
+    public void deleteUserForceById(Long id) {
         userRepository.deleteById(id);
     }
-
 
 
     public void confirmEmail(long id) {//TODO id, or User?

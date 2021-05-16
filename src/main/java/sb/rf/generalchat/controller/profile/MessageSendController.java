@@ -36,22 +36,22 @@ public class MessageSendController {
     @PostMapping("/sendMessage")
     public String sendMessage(HttpServletRequest request,@ModelAttribute("messageForm") @Valid FirstMessageDto messageForm,
                               BindingResult bindingResult,Model model){
-        log.info("Прбывшее message dto {}",messageForm);
+        log.info("Coming message dto {}",messageForm);
         if(!bindingResult.hasErrors()){
-            log.info("Ошибок нет");
+            log.info("No errors");
             user = (User) request.getSession().getAttribute("user");
             log.info(user.toString());
             userTo = userService.getUserByEmail(messageForm.getUser());
             message = Message.builder().idFrom(user.getId()).idTo(userTo.getId()).time(new Timestamp(System.currentTimeMillis())).message(messageForm.getMessage()).build();
             log.info("Сообщение : {}",message.toString());
             messageService.sendMessage(message);
-            log.info("Введенные данные коректны, иду дальше");
+            log.info("The data entered is correct, go ahead");
             return "redirect:/user/selfProfile";
         }else {
 
-            log.info("Отправляемая dto {}",messageForm.toString());
-            bindingResult.getAllErrors().forEach(x->log.info("Oшибки перечислены здесь  {}",x.toString()));
-            log.info("Введенные данные некоректны, показываю ошибку");
+            log.info("Sended dto {}",messageForm.toString());
+            bindingResult.getAllErrors().forEach(x->log.info("The errors are listed here  {}",x.toString()));
+            log.info("The data entered is incorrect, showing an error");
             model.addAttribute("messageForm", messageForm);
             model.addAttribute("userSettingsForm",new UserChangeSettingsDto());
             return "Profile";

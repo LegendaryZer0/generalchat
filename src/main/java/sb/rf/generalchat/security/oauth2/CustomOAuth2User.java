@@ -51,10 +51,6 @@ public class CustomOAuth2User implements OidcUser {
         return null;
     }
 
-/*    public String getOpenID() {
-        log.info("openid is : {}",oauth2User.<String>getAttribute("openid"));
-        return oauth2User.<String>getAttribute("openid");
-    }*/
 
 
 }
