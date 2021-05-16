@@ -3,6 +3,7 @@ package sb.rf.generalchat.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,7 +13,6 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 import sb.rf.generalchat.model.GoogleOpenIdUser;
-import sb.rf.generalchat.model.TechnicalInfo;
 import sb.rf.generalchat.model.User;
 import sb.rf.generalchat.repository.GoogleOidcRepo;
 import sb.rf.generalchat.repository.UserJpaRepository;
@@ -34,7 +34,6 @@ public class GoogleOidcServiceImpl implements GoogleOidcService {
     private UserDetailsService userDetailsService;
     @Autowired
     private MessageService messageService;
-
 
     @Override
     public void processOAuthPostLogin(OidcUser oidcUser, HttpServletRequest request) {
@@ -81,24 +80,7 @@ public class GoogleOidcServiceImpl implements GoogleOidcService {
     }
 
     private void createUserAccountFromGoogleOidc(OidcUser oidcUser, HttpServletRequest request) {
-        GoogleOpenIdUser googleOpenIdUser = GoogleOpenIdUser.builder()
-                .oidcUser(oidcUser)
-                .email(oidcUser.getEmail())
-                .name(oidcUser.getName())
-                .nickname(oidcUser.getFullName())
-                .account_user(User.builder()
-                        .email(oidcUser.getEmail())
-                        .nickname(oidcUser.getFullName())
-                        .password("")  //todo разобраться,как в этом случае лучше сохранять пароль
-
-                        .role(User.Role.USER)
-                        .state(User.State.ACTIVE)
-                        .technicalInfo(TechnicalInfo.builder()
-                                .isDeleted(false)
-                                .confirmState(TechnicalInfo.ConfirmState.CONFIRMED)
-                                .build())
-                        .build()).build();
-
+        GoogleOpenIdUser googleOpenIdUser = GoogleOpenIdUser.from(oidcUser);
         GoogleOpenIdUser googleUser = googleOidcRepo.save(googleOpenIdUser);
         messageService.sendWelcomeMessage(googleUser.getAccount_user().getId());
         setAuthenticationForce(googleOpenIdUser, request);
@@ -115,6 +97,8 @@ public class GoogleOidcServiceImpl implements GoogleOidcService {
         userRepository.updateUser(userAccount, userAccount.getId());
         setAuthenticationForce(userAccount, request);
     }
+
+
 
 
 }

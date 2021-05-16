@@ -65,4 +65,26 @@ public class GoogleOpenIdUser implements OidcUser {
     public String getName() {
         return oidcUser.getName();
     }
+
+
+
+    public static GoogleOpenIdUser from(OidcUser oidcUser){
+        GoogleOpenIdUser googleOpenIdUser = GoogleOpenIdUser.builder()
+                .oidcUser(oidcUser)
+                .email(oidcUser.getEmail())
+                .name(oidcUser.getName())
+                .nickname(oidcUser.getFullName())
+                .account_user(User.builder()
+                        .email(oidcUser.getEmail())
+                        .nickname(oidcUser.getFullName())
+                        .password("")
+                        .role(User.Role.USER)
+                        .state(User.State.ACTIVE)
+                        .technicalInfo(TechnicalInfo.builder()
+                                .isDeleted(false)
+                                .confirmState(TechnicalInfo.ConfirmState.CONFIRMED)
+                                .build())
+                        .build()).build();
+        return googleOpenIdUser;
+    }
 }

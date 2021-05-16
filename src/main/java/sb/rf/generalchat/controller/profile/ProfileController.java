@@ -58,6 +58,7 @@ public class ProfileController {
         log.info("userSettingsForm {}",userSettingsForm);
        /* model.addAttribute("messageForm", new FirstMessageDto());*/
         if(!bindingResult.hasErrors()) {
+            User userInSession = (User) request.getSession().getAttribute("user");
             log.info("Ошибок нет");
             User user = userSettingsForm.getUser();
             log.info("User in changeSettings Controller{}", user);

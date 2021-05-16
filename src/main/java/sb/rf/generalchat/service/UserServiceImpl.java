@@ -87,11 +87,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.getUserById(id).get();
     }
 
-  /*  public User findUser(UUID uuid) {
-
-        return userRepository.findUserByTechnicalInfo_Uuid(uuid).get();
-
-    } *///fixme Определить, где это использовалось (видимо, тоже не понадобится в скором времени)
 
     public List<User> findAllUsersChats(long id) {
         log.info("Users id");
@@ -100,7 +95,7 @@ public class UserServiceImpl implements UserService {
         return userList;
     }
 
-    public User updateUser(User user) {//fixme user должен прилетать вместе с id
+    public User updateUser(User user) {
         log.info("description user update {}", user);
 
 

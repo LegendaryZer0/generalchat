@@ -47,7 +47,7 @@ public class RegistrationController {
         }
         log.info(String.valueOf(result.getAllErrors()));
 
-        return result.getFieldError().getDefaultMessage(); //todo затестить на клиенте, что и как приходит
+        return result.getFieldError().getDefaultMessage();
 
 
     }

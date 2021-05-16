@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 @Component
 public class RefreshTokenFilter extends OncePerRequestFilter {
@@ -40,18 +42,16 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
             Pair<String, String> tokens = refreshTokenService.getRefreshAccessTokensWithRotation(refreshToken, accessToken.orElseThrow(IllegalStateException::new).getValue(), deviceName);
 
             Cookie accessTokenCookie = new Cookie("access_token", tokens.getFirst());
-            accessTokenCookie.setHttpOnly(true);
-
             Cookie refreshTokenCookie = new Cookie("refresh_token", tokens.getSecond());
-            refreshTokenCookie.setHttpOnly(true);
-
-
-            response.addCookie(accessTokenCookie);
-            response.addCookie(refreshTokenCookie);
+            addHttpOnlyCookiesToUser(response,accessTokenCookie,refreshTokenCookie);
             response.setStatus(200);
         } else filterChain.doFilter(request, response);
 
     }
+    private void addHttpOnlyCookiesToUser(HttpServletResponse response, Cookie... cookies) {
+        Arrays.stream(cookies).peek(x -> x.setHttpOnly(true)).forEach(response::addCookie);
+    }
+
 
 
     @Override
