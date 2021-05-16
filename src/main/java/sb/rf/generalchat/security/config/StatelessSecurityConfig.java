@@ -21,7 +21,7 @@ import sb.rf.generalchat.security.handler.SignInFailHandler;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @Order(1)
 public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
