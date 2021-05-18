@@ -1,4 +1,4 @@
-package sb.rf.generalchat.handler;
+package sb.rf.generalchat.handler.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -22,13 +22,10 @@ public class BasicExceptionHandler  {
             RuntimeException ex, HttpServletResponse response) {
         String bodyOfResponse = "This should be application specific";
         log.error("BE AWARE ILLEGAL STATE/ARGUMENT OR NO SUCH ELEMENT EXCEPTION ",ex);
-        response.setStatus(HttpStatus.I_AM_A_TEAPOT.value());
+        response.setStatus(418);
         return "BasicErrorPage"/*handleExceptionInternal(ex, bodyOfResponse,
                 new HttpHeaders(), HttpStatus.CONFLICT, request)*/;
     }
-
-
-
 
 
 }
