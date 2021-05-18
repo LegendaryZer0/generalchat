@@ -42,11 +42,6 @@ public class AccountController {
 
     }
 
-    @PostMapping("/account/{email}/{password}")
-    public ResponseEntity<User> addUser(@PathVariable("email") String email, @PathVariable("password") String password) {
-        return ResponseEntity.ok(userService.addUser(User.builder().email(email).password(password).nickname(email).role(User.Role.USER).state(User.State.FROZEN).build()));
-    }
-
     @PostMapping("/account/reg")
     public ResponseEntity<User> basicAddUser(RegistrationDto dto) {
         return ResponseEntity.ok(userService.addUser(dto.getUser()));

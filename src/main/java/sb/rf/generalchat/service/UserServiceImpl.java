@@ -45,7 +45,10 @@ public class UserServiceImpl implements UserService {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             log.info("reg user, {}", user);
             if (userRepository.getUserByEmail(user.getEmail()).isEmpty()) {
+                log.info("saving user");
                 user = userRepository.save(user);
+                log.info("saved user");
+
             }
             log.info("user repo log info by email {},", userRepository.getUserByEmail(user.getEmail()).get());
             String confirmMail = mailsGenerator.getEmailforConfirm(serverUrl, userRepository.getUserByEmail(user.getEmail()).get().getId());

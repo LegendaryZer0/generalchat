@@ -113,8 +113,6 @@ public class SecurityBasicConfig extends WebSecurityConfigurerAdapter {
                 }).and()
                 .csrf()
                 .ignoringAntMatchers("/api/**", "/authenticate/**")
-
-
         ;
 
     }

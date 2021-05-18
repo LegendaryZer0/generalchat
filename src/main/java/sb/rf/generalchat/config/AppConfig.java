@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassRelativeResourceLoader;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.mobile.device.DeviceHandlerMethodArgumentResolver;
 import org.springframework.mobile.device.DeviceResolverHandlerInterceptor;
 import org.springframework.session.web.http.DefaultCookieSerializer;
@@ -17,6 +18,7 @@ import org.springframework.ui.freemarker.SpringTemplateLoader;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import sb.rf.generalchat.converter.BasicAdminConverter;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -38,6 +40,11 @@ public class AppConfig implements WebMvcConfigurer {
         configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
         return configuration;
 
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new BasicAdminConverter());
     }
 
     @Bean

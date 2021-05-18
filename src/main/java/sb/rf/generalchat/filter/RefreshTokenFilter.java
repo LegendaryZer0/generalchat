@@ -1,6 +1,7 @@
 package sb.rf.generalchat.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.mobile.device.Device;
@@ -19,7 +20,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-
+@Slf4j
 @Component
 public class RefreshTokenFilter extends OncePerRequestFilter {
 
@@ -32,6 +33,7 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+      log.info("Refresh work start work");
         if (response.getStatus() == 403) {
             Device device = DeviceUtils.getCurrentDevice(request);
             String deviceName = device.getDevicePlatform().name();

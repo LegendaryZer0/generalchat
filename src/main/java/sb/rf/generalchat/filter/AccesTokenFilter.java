@@ -27,7 +27,7 @@ public class AccesTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-
+        log.info("accessFilterStartedToWork");
         Optional<Cookie> accesTokenCookie = Arrays.stream(request.getCookies()).filter(x -> x.getName().equals("access_token")).findFirst();
         if (accesTokenCookie.isPresent() && !jwtUtil.isTokenExpired(accesTokenCookie.get().getValue())) {
             String userName;

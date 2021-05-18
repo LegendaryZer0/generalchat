@@ -58,7 +58,7 @@ public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.csrf().ignoringAntMatchers("/api/**", "/authenticate/**").and()
+        http.csrf().ignoringAntMatchers("/api/**", "/authenticate/**","/api/generate/**").and()
                 .authorizeRequests()
                 .and().formLogin().disable().authorizeRequests()
                 .antMatchers("/api/**").hasAuthority("ADMIN")
