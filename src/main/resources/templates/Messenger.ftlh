@@ -1,7 +1,7 @@
 <#ftl encoding="UTF-8"/>
 <!------ Include the above in your HEAD tag ---------->
 <#import "mcrs/headScripts.ftlh" as h>
-<#import "mcrs/chatCss.ftlh" as c>
+
 <#import  "spring.ftl" as spring/>
 <!DOCTYPE html>
 <html>
@@ -18,10 +18,7 @@
             src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.js"></script>
     <@h.headScript></@h.headScript>
 
-    <style>
-        <@c.chatCss></@c.chatCss>
-
-    </style>
+    <link rel="stylesheet" type="text/css" href="<@spring.url '/css/chatCss.css' />" />
 
 
     <meta  name = "_csrf"  content = "${_csrf.token}" />

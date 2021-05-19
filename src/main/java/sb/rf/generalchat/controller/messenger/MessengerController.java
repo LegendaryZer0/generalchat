@@ -50,15 +50,7 @@ public class MessengerController {
         return messagesDto;
     }
 
-    @PostMapping("/giveUrl")
-    @ResponseBody
-    public UUID getUUIDForUsers(@RequestBody Long[] data){
 
-        UUID uuid =  chatService.getChatUUID(data);
-        log.info("uuid отправлено : {}",uuid );
-        return uuid;
-
-    }
 
 
     @GetMapping("/messenger")

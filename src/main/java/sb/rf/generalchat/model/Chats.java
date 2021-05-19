@@ -5,7 +5,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,9 +22,10 @@ public class Chats implements Serializable {
     @Column(name = "id_to" )
     private Long idTo;
 
-    @Basic
-    @Column(name = "uuid", nullable = false)
-    private UUID uuid = UUID.randomUUID();
+    @Enumerated(EnumType.STRING)
+    @Column(name = "state")
+    private State state;
+
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "id_from", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
@@ -37,5 +37,8 @@ public class Chats implements Serializable {
     @JsonIgnore
     private User userByIdTo;
 
+    public  enum  State{
+     BLOCKED,ACTIVE,BANNED
+    }
 
 }

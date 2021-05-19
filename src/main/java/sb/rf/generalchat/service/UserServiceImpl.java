@@ -13,6 +13,7 @@ import sb.rf.generalchat.util.MailsGenerator;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -97,6 +98,9 @@ public class UserServiceImpl implements UserService {
         List<User> userList = userRepository.findAllUserChatsById(id);
         log.info("all users chats :  {}", userList);
         return userList;
+    }
+    public Integer findCountOfDailyChatedUsers(){
+       return userRepository.findDailyChatedUsers().stream().map(User::getId).collect(Collectors.toSet()).size();
     }
 
     public User updateUser(User user) {

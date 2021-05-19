@@ -1,6 +1,7 @@
 package sb.rf.generalchat.security.oauth2.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.query.criteria.internal.CriteriaBuilderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -9,6 +10,9 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import sb.rf.generalchat.repository.UserJpaRepository;
 import sb.rf.generalchat.security.oauth2.CustomOAuth2User;
+
+import javax.persistence.criteria.CriteriaBuilder;
+
 @Slf4j
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {

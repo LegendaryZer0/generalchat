@@ -24,6 +24,7 @@ public interface UserService {
     public Integer deleteUser(String email);
     public void deleteUserForceById(Long id);
     public List<User> getAllUsersForce();
+    public Integer findCountOfDailyChatedUsers();
 
 
     void processOAuthPostLogin(OAuth2User oauthUser);

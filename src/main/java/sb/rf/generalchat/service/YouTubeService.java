@@ -22,38 +22,36 @@ public class YouTubeService {
 
     private static final long MAX_SEARCH_RESULTS = 7;
 
-    /**
-     * Returns the first 5 YouTube videos that match the query term
-     */
+
     public List<YouTubeVideo> fetchVideosByQuery(String queryTerm) {
         List<YouTubeVideo> videos = new ArrayList<YouTubeVideo>();
 
         try {
-            //instantiate youtube object
+
             YouTube youtube = getYouTube();
 
-            //define what info we want to get
+
             YouTube.Search.List search = youtube.search().list("id,snippet");
 
-            //set our credentials
+
             String apiKey = "AIzaSyAea0nVkFuNfkN296MN0MYVjxog0dRb5-Q";
             search.setKey(apiKey);
 
-            //set the search term
+
             search.setQ(queryTerm);
 
-            //we only want video results
+
             search.setType("video");
 
-            //set the fields that we're going to use
+
             search.setFields("items(id/kind,id/videoId,snippet/title,snippet/description,snippet/publishedAt,snippet/thumbnails/default/url)");
 
-            //set the max results
+
             search.setMaxResults(MAX_SEARCH_RESULTS);
 
             DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
 
-            //perform the search and parse the results
+
             SearchListResponse searchResponse = search.execute();
             log.info("base url {}",youtube.getBaseUrl());
             log.info( " servicepath {}",youtube.getServicePath());
@@ -87,9 +85,7 @@ public class YouTubeService {
     }
 
 
-    /**
-     * Constructs the URL to play the YouTube video
-     */
+
     private String buildVideoUrl(String videoId) {
         StringBuilder builder = new StringBuilder();
         builder.append("https://www.youtube.com/watch?v=");
@@ -99,9 +95,7 @@ public class YouTubeService {
     }
 
 
-    /**
-     * Instantiates the YouTube object
-     */
+
     private YouTube getYouTube() {
         YouTube youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(),
                 (reqeust) -> {}).setApplicationName("youtube-spring-boot-demo").build();

@@ -17,7 +17,7 @@ public interface UserJpaRepository extends JpaRepository<User, Long> {
     Optional<User> getUserById(Long id);
 
     @Transactional
-    @Query(nativeQuery = true, value = "select * from account where account.id in(select id_to from chats where id_from=:user_id or id_to =:user_id union  select id_from  from chats where id_from=:user_id or id_to =:user_id)")
+    @Query(nativeQuery = true, value = "select * from account where account.id in(select id_to from chats where id_from=:user_id or id_to =:user_id union  select id_from  from chats where id_from=:user_id or id_to =:user_id) and state not like 'BANNED'")
     List<User> findAllUserChatsById(@Param("user_id") long id);
 
 
@@ -39,5 +39,8 @@ public interface UserJpaRepository extends JpaRepository<User, Long> {
     @Query(nativeQuery = true, value = "update technical_info  set isdeleted=true where technical_info.id in(select id from account where account.email=:email) ")
     Integer markUserAsDeleted(@Param("email") String email);
 
+    @Transactional
+    @Query(nativeQuery = true,value = "select * from  account inner join message m on account.id = m.id_from where  time between CURRENT_TIMESTAMP - interval '24 hour' and CURRENT_TIMESTAMP")
+    List<User> findDailyChatedUsers();
 
 }

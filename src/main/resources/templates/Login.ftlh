@@ -2,7 +2,7 @@
 <#import "mcrs/bodyScripts.ftlh" as b>
 
 <#import "mcrs/headScripts.ftlh" as h>
-<#import "mcrs/LoginCss.ftlh" as c>
+
 <#import  "spring.ftl" as spring/>
 <html lang="eng">
 <head>
@@ -19,9 +19,7 @@
     <meta  name = "_csrf"  content = "${_csrf.token}" />
     <! - имя заголовка по умолчанию - X-CSRF-TOKEN ->
     <meta  name = "_csrf_header"  content = "${_csrf.headerName}" />
-    <style>
-        <@c.logCss></@c.logCss>
-    </style>
+    <link rel="stylesheet" type="text/css" href="<@spring.url '/css/LoginCss.css' />" />
 
 
     <@h.headScript></@h.headScript>

@@ -21,8 +21,6 @@ public class RedisUser implements Serializable {
     private String refreshToken;
     @Indexed
     private Long userId;
-
-
     @Indexed
     private String deviceName;
 

@@ -68,7 +68,7 @@ public class ProfileController {
                 request.getSession().setAttribute("user", user);
                 log.info("All went well, just giving the same profile page");
                 return "redirect:/user/selfProfile";    //return Profile
-            } else return "redirect:/user/selfProfile";//Todo пофиксить после правльного обновления данных
+            } else return "redirect:/user/selfProfile";
         }else {
 
             model.addAttribute("passNamesErrors",bindingResult.getAllErrors().stream().anyMatch(error->{

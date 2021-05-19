@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
-import sb.rf.generalchat.model.GoogleOpenIdUser;
+import sb.rf.generalchat.model.BasicOpenIdUser;
 import sb.rf.generalchat.model.User;
 import sb.rf.generalchat.repository.GoogleOidcRepo;
 import sb.rf.generalchat.repository.UserJpaRepository;
@@ -39,7 +39,7 @@ public class GoogleOidcServiceImpl implements GoogleOidcService {
         log.info("Now i need save , {}", oidcUser);
         Optional<User> userAccount = userRepository.getUserByEmail(oidcUser.getEmail());
         if (userAccount.isEmpty()) {  //два случая, пуст из-за того, чтоюзеравообще нет, и потому чот есть, однако с невалидным email-ом
-            Optional<GoogleOpenIdUser> googleOpenIdUserFromRepo = googleOidcRepo.findById(oidcUser.getName());//Если и его нет, тоюзера точно нет
+            Optional<BasicOpenIdUser> googleOpenIdUserFromRepo = googleOidcRepo.findById(oidcUser.getName());//Если и его нет, тоюзера точно нет
             if (googleOpenIdUserFromRepo.isEmpty()) {
                 //если юзера вообще нет
                 createUserAccountFromGoogleOidc(oidcUser, request);
@@ -58,8 +58,8 @@ public class GoogleOidcServiceImpl implements GoogleOidcService {
     }
 
 
-    private void setAuthenticationForce(GoogleOpenIdUser googleOpenIdUser, HttpServletRequest request) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(googleOpenIdUser.getEmail());
+    private void setAuthenticationForce(BasicOpenIdUser basicOpenIdUser, HttpServletRequest request) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(basicOpenIdUser.getEmail());
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 userDetails, null, userDetails.getAuthorities());
         usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -79,20 +79,20 @@ public class GoogleOidcServiceImpl implements GoogleOidcService {
     }
 
     private void createUserAccountFromGoogleOidc(OidcUser oidcUser, HttpServletRequest request) {
-        GoogleOpenIdUser googleOpenIdUser = GoogleOpenIdUser.from(oidcUser);
-        GoogleOpenIdUser googleUser = googleOidcRepo.save(googleOpenIdUser);
+        BasicOpenIdUser basicOpenIdUser = BasicOpenIdUser.from(oidcUser);
+        BasicOpenIdUser googleUser = googleOidcRepo.save(basicOpenIdUser);
         messageService.sendWelcomeMessage(googleUser.getAccount_user().getId());
-        setAuthenticationForce(googleOpenIdUser, request);
+        setAuthenticationForce(basicOpenIdUser, request);
     }
 
 
     private void updateUsersGoogleOidcPart(OidcUser oidcUser, User userAccount, HttpServletRequest request) {
-        GoogleOpenIdUser googleOpenIdUser = GoogleOpenIdUser.builder()
+        BasicOpenIdUser basicOpenIdUser = BasicOpenIdUser.builder()
                 .oidcUser(oidcUser)
                 .email(oidcUser.getEmail())
                 .name(oidcUser.getName())
                 .nickname(oidcUser.getFullName()).build();
-        userAccount.setGoogleOpenIdUser(googleOpenIdUser);
+        userAccount.setBasicOpenIdUser(basicOpenIdUser);
         userRepository.updateUser(userAccount, userAccount.getId());
         setAuthenticationForce(userAccount, request);
     }

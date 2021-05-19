@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import sb.rf.generalchat.model.Chats;
 import sb.rf.generalchat.model.Message;
+import sb.rf.generalchat.model.MessageStatisticView;
 import sb.rf.generalchat.repository.ChatsRepository;
 import sb.rf.generalchat.repository.MessageRepository;
+import sb.rf.generalchat.repository.MessageStatisticRepository;
 
 import java.sql.Timestamp;
 import java.util.Comparator;
@@ -15,31 +17,36 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-public class MessageServiceImpl implements MessageService {
+public class MessageServiceImpl implements MessageService,MessageStatisticService {
     private final MessageRepository messageRepo;
     private final UserService userService;
+
+    private final MessageStatisticRepository statisticRepository;
 
     private final ChatsRepository chatsRepository;
 
     @Value("${welcome.message}")
     private String WELCOME_MESSAGE;
 
-
-    public MessageServiceImpl(MessageRepository messageRepo, UserService userService, ChatsRepository repository) {
+    public List<MessageStatisticView> getMessageStatistic(){
+        return statisticRepository.findAll();
+    }
+    public MessageServiceImpl(MessageRepository messageRepo, UserService userService, ChatsRepository repository,MessageStatisticRepository statisticRepository) {
         this.messageRepo = messageRepo;
         this.userService = userService;
         this.chatsRepository = repository;
+        this.statisticRepository = statisticRepository;
     }
 
     public void sendMessage(Message message) {
 
         message.setIdFrom(message.getIdFrom());
-        message.setIdTo(message.getIdTo()); //Todo протестить
+        message.setIdTo(message.getIdTo());
         log.info("Save message {}", message);
         messageRepo.save(message);
         Chats chat = chatsRepository.save(Chats.builder().idFrom(message.getIdFrom())
                 .idTo(message.getIdTo())
-                .uuid(UUID.randomUUID()).build());
+                .build());
         log.info("created chat {}", chat);
     }
 

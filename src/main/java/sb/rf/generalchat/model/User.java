@@ -55,7 +55,7 @@ public class User implements Serializable {
     @OneToOne(mappedBy = "account_user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     @JsonIgnore
-    private GoogleOpenIdUser googleOpenIdUser;
+    private BasicOpenIdUser basicOpenIdUser;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -88,6 +88,8 @@ public class User implements Serializable {
     public enum State {
         ACTIVE, BANNED, FROZEN
     }
+
+
 
 
 }

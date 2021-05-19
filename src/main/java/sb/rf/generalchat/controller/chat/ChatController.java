@@ -28,8 +28,8 @@ public class ChatController {
 
     @MessageMapping("/chatroom/")
     @SendTo("/chat/{uuid}")
-    public void processMessage(@Payload MessagesDto chatMessage,@DestinationVariable("uuid") String uuid) {
-        log.info("message: {}  uuid:  {}",chatMessage,uuid);
+    public void processMessage(@Payload MessagesDto chatMessage) {
+        log.info("message: {} ",chatMessage);
         chatMessageService.sendMessage(chatMessage.converToMessage());
     }
 

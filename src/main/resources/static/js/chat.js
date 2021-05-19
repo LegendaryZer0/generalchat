@@ -36,22 +36,43 @@ $(document).ready(function () {
         sendNameWithStomp();
         disconnectWithStomp();*/
         console.log("Disconnected from stomp")
+        console.log(val)
+        if(val.includes("youtube.com/watch?v=")){
+            val.split("=")[1];
+            console.log( val.split("="))
+            console.log("NEW SPLIT")
+            console.log(val.split("youtube.com/watch?v=")[1].split("&")[0])
 
-        $('#messageBox').append(" <div class=\"d-flex justify-content-start mb-4\">\n" +
-            "                        <div class=\"img_cont_msg\">\n" +
-            "                            <img src=\"https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg\"\n" +
-            "                                 class=\"rounded-circle user_img_msg\">\n" +
-            "                        </div>\n" +
-            "                        <div class=\"msg_cotainer\">\n" +
-            "                            " + val + "  \n" +
-            "                            <span class=\"msg_time\"> " + new Date(+new Date()) + "</span>\n" +
-            "                        </div>\n" +
-            "                    </div>")
+            appendMessage(val+youtubeViewWrapper(val.split("youtube.com/watch?v=")[1].split("&")[0]))
+
+        }else {
+
+           appendMessage(val)
+
+
+        }
+
 
     });
 
 
 });
+
+function appendMessage( messageValue){
+    $('#messageBox').append(" <div class=\"d-flex justify-content-start mb-4\">\n" +
+        "                        <div class=\"img_cont_msg\">\n" +
+        "                            <img src=\"https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg\"\n" +
+        "                                 class=\"rounded-circle user_img_msg\">\n" +
+        "                        </div>\n" +
+        "                        <div class=\"msg_cotainer\">\n" +
+        "                            " + messageValue + "  \n" +
+        "                            <span class=\"msg_time\"> " + new Date(+new Date()) + "</span>\n" +
+        "                        </div>\n" +
+        "                    </div>")
+
+}
+
+
 
 
 function changeHead(n) {
@@ -66,38 +87,38 @@ function changeHead(n) {
 }
 
 
-function  getUrl(id_from,id_to) {
-    let data = [id_from,id_to]
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
-   $.ajax({
-        async:false,
-        type: 'POST',
-        url: 'giveUrl',
-        contentType: "application/json",
-        data: JSON.stringify(data),
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader(header, token);
-            console.log(data);
-        },
-        success: function (data) {
-            console.log("Пришедший RAW url")
-            console.log(data);
-            url =data;
-      /*      let temp = JSON.parse(data);
-            console.log("temp")
-            console.log(temp)*/
-            console.log("url")
-            console.log(url)
-
-            return  url;
-        }
-    });
-    let json = JSON.stringify(data);
-
-
-
-}
+// function  getUrl(id_from,id_to) {
+//     let data = [id_from,id_to]
+//     var token = $("meta[name='_csrf']").attr("content");
+//     var header = $("meta[name='_csrf_header']").attr("content");
+//    $.ajax({
+//         async:false,
+//         type: 'POST',
+//         url: 'giveUrl',
+//         contentType: "application/json",
+//         data: JSON.stringify(data),
+//         beforeSend: function (xhr) {
+//             xhr.setRequestHeader(header, token);
+//             console.log(data);
+//         },
+//         success: function (data) {
+//             console.log("Пришедший RAW url")
+//             console.log(data);
+//             url =data;
+//       /*      let temp = JSON.parse(data);
+//             console.log("temp")
+//             console.log(temp)*/
+//             console.log("url")
+//             console.log(url)
+//
+//             return  url;
+//         }
+//     });
+//     let json = JSON.stringify(data);
+//
+//
+//
+// }
 
 
 
@@ -106,17 +127,14 @@ function changeChat(id_from, id_to, nick) {
         console.log("Закрываю сокет")
         socket.close();
     }
-    let uuidUrl =getUrl(id_from,id_to);
-    console.log("UUID url")
-    console.log(uuidUrl);
-    console.log("URL")
-    console.log(url);
+    // let uuidUrl =getUrl(id_from,id_to);
+
 
 
     main_id_from = id_from;
     main_id_to = id_to;
     console.log("Получаю сокет")
-    socket = new WebSocket("ws://localhost:8080/chat/" + url);
+    socket = new WebSocket("ws://localhost:8080/chat/chatendpoint");
     changeHead(nick);
     console.log("Начинаю подгрузку сообщений")
     loadMesages(id_from, id_to);
@@ -152,9 +170,13 @@ function changeChat(id_from, id_to, nick) {
          console.log(json);
          console.log("json strigify")
          console.log(JSON.stringify(message.data, ));
+         messageFromAnotherUser =json['message'];
+        if(messageFromAnotherUser.includes("youtube.com/watch?v=")){
+            messageFromAnotherUser =  messageFromAnotherUser+ youtubeViewWrapper( messageFromAnotherUser.split("youtube.com/watch?v=")[1].split("&")[0])
+        }
         $('#messageBox').append("<div class=\"d-flex justify-content-end mb-4\">\n" +
             "                        <div class=\"msg_cotainer_send\">\n" +
-            "                            " + json['message'] + " \n" +
+            "                            " + messageFromAnotherUser + " \n" +
             "                            <span class=\"msg_time_send\"> " + json['date'] + "</span>\n" +
             "                        </div>\n" +
             "                        <div class=\"img_cont_msg\">\n" +
@@ -209,24 +231,30 @@ function loadMesages(id_from, id_to) {
             console.log("Пришедшие сообщения json[0]")
             console.log( testJson)
             $.each(data, function (index, message) {
+                final_message= message['message']
+                if(final_message.includes("youtube.com/watch?v=")){
+                    final_message = final_message+ youtubeViewWrapper(final_message.split("youtube.com/watch?v=")[1].split("&")[0])
+                }
                 if (message['from'] === id_from) {
                     /*console.log(message['message']);*/
+
+
                     $('#messageBox').append(" <div class=\"d-flex justify-content-start mb-4\">\n" +
                         "                        <div class=\"img_cont_msg\">\n" +
                         "                            <img src=\"https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg\"\n" +
                         "                                 class=\"rounded-circle user_img_msg\">\n" +
                         "                        </div>\n" +
                         "                        <div class=\"msg_cotainer\">\n" +
-                        "                            " + message['message'] + "  \n" +
+                        "                            " + final_message+ "  \n" +
                         "                            <span class=\"msg_time\"> " + message['date'] + "</span>\n" +
                         "                        </div>\n" +
                         "                    </div>")
 
-                    /*console.log(message)*/
+
                 } else {
                     $('#messageBox').append("<div class=\"d-flex justify-content-end mb-4\">\n" +
                         "                        <div class=\"msg_cotainer_send\">\n" +
-                        "                            " + message['message'] + " \n" +
+                        "                            " + final_message + " \n" +
                         "                            <span class=\"msg_time_send\"> " + message['date'] + "</span>\n" +
                         "                        </div>\n" +
                         "                        <div class=\"img_cont_msg\">\n" +
@@ -249,6 +277,11 @@ function loadMesages(id_from, id_to) {
          }*/
     });
 
+}
+
+
+function youtubeViewWrapper(videoID){
+   return  "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/"+videoID+"\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>"
 }
 
 

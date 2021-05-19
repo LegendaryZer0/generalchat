@@ -17,7 +17,7 @@ import java.util.Map;
 @Entity
 @NoArgsConstructor
 @Builder
-public class GoogleOpenIdUser implements OidcUser {
+public class BasicOpenIdUser implements OidcUser {
 
 
     @Transient
@@ -68,8 +68,8 @@ public class GoogleOpenIdUser implements OidcUser {
 
 
 
-    public static GoogleOpenIdUser from(OidcUser oidcUser){
-        GoogleOpenIdUser googleOpenIdUser = GoogleOpenIdUser.builder()
+    public static BasicOpenIdUser from(OidcUser oidcUser){
+        BasicOpenIdUser basicOpenIdUser = BasicOpenIdUser.builder()
                 .oidcUser(oidcUser)
                 .email(oidcUser.getEmail())
                 .name(oidcUser.getName())
@@ -85,6 +85,6 @@ public class GoogleOpenIdUser implements OidcUser {
                                 .confirmState(TechnicalInfo.ConfirmState.CONFIRMED)
                                 .build())
                         .build()).build();
-        return googleOpenIdUser;
+        return basicOpenIdUser;
     }
 }

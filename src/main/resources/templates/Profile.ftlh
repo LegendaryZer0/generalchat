@@ -96,7 +96,7 @@
                                 <p></p>
 
                                 <@spring.bind "messageForm"/>
-                                <form role="form" method="post" action="sendMessage?${_csrf.parameterName}=${_csrf.token}">
+                                <form role="form" method="post" action="/user/sendMessage?${_csrf.parameterName}=${_csrf.token}">
 
                                     <div class="form-group">
                                         <input type="text" class="form-control rounded" placeholder="Укажите Ваше Имя" name="from-email" value="${user.email} " hidden>
