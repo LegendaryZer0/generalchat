@@ -13,11 +13,10 @@ import sb.rf.generalchat.repository.MessageStatisticRepository;
 import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Service
-public class MessageServiceImpl implements MessageService,MessageStatisticService {
+public class MessageServiceImpl implements MessageService, MessageStatisticService {
     private final MessageRepository messageRepo;
     private final UserService userService;
 
@@ -28,14 +27,15 @@ public class MessageServiceImpl implements MessageService,MessageStatisticServic
     @Value("${welcome.message}")
     private String WELCOME_MESSAGE;
 
-    public List<MessageStatisticView> getMessageStatistic(){
-        return statisticRepository.findAll();
-    }
-    public MessageServiceImpl(MessageRepository messageRepo, UserService userService, ChatsRepository repository,MessageStatisticRepository statisticRepository) {
+    public MessageServiceImpl(MessageRepository messageRepo, UserService userService, ChatsRepository repository, MessageStatisticRepository statisticRepository) {
         this.messageRepo = messageRepo;
         this.userService = userService;
         this.chatsRepository = repository;
         this.statisticRepository = statisticRepository;
+    }
+
+    public List<MessageStatisticView> getMessageStatistic() {
+        return statisticRepository.findAll();
     }
 
     public void sendMessage(Message message) {

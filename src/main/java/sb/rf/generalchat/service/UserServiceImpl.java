@@ -99,8 +99,9 @@ public class UserServiceImpl implements UserService {
         log.info("all users chats :  {}", userList);
         return userList;
     }
-    public Integer findCountOfDailyChatedUsers(){
-       return userRepository.findDailyChatedUsers().stream().map(User::getId).collect(Collectors.toSet()).size();
+
+    public Integer findCountOfDailyChatedUsers() {
+        return userRepository.findDailyChatedUsers().stream().map(User::getId).collect(Collectors.toSet()).size();
     }
 
     public User updateUser(User user) {

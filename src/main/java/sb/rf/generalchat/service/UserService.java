@@ -1,30 +1,36 @@
 package sb.rf.generalchat.service;
 
 
-
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import sb.rf.generalchat.model.User;
-import sb.rf.generalchat.security.oauth2.CustomOAuth2User;
-import sb.rf.generalchat.security.oauth2.CustomOidcUser;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    public List<User> findAllUsersChats(long id);
-    public User updateUser(User user);
+    List<User> findAllUsersChats(long id);
 
-    public User getUserById(long id);
-    public Optional<User> getUser(String login, String password);
-    public User getUserByEmail(User user);
-    public User addUser(User user);
-    public void confirmEmail(long id);
-    public List<User> getAllUsers();
-    public Integer deleteUser(String email);
-    public void deleteUserForceById(Long id);
-    public List<User> getAllUsersForce();
-    public Integer findCountOfDailyChatedUsers();
+    User updateUser(User user);
+
+    User getUserById(long id);
+
+    Optional<User> getUser(String login, String password);
+
+    User getUserByEmail(User user);
+
+    User addUser(User user);
+
+    void confirmEmail(long id);
+
+    List<User> getAllUsers();
+
+    Integer deleteUser(String email);
+
+    void deleteUserForceById(Long id);
+
+    List<User> getAllUsersForce();
+
+    Integer findCountOfDailyChatedUsers();
 
 
     void processOAuthPostLogin(OAuth2User oauthUser);

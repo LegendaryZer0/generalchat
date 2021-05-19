@@ -23,6 +23,7 @@ import sb.rf.generalchat.converter.BasicAdminConverter;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 @Slf4j
 @Configuration
 public class AppConfig implements WebMvcConfigurer {

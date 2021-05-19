@@ -1,7 +1,6 @@
 package sb.rf.generalchat.service;
 
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.youtube.YouTube;
@@ -16,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 @Slf4j
 @Service
 public class YouTubeService {
@@ -53,11 +53,10 @@ public class YouTubeService {
 
 
             SearchListResponse searchResponse = search.execute();
-            log.info("base url {}",youtube.getBaseUrl());
-            log.info( " servicepath {}",youtube.getServicePath());
-            ;
-            log.info("search object is {}",search.toString());
-            log.info("UriTemplate is {}",search.getUriTemplate());
+            log.info("base url {}", youtube.getBaseUrl());
+            log.info(" servicepath {}", youtube.getServicePath());
+            log.info("search object is {}", search.toString());
+            log.info("UriTemplate is {}", search.getUriTemplate());
             List<SearchResult> searchResultList = searchResponse.getItems();
             if (searchResultList != null) {
                 for (SearchResult result : searchResultList) {
@@ -85,7 +84,6 @@ public class YouTubeService {
     }
 
 
-
     private String buildVideoUrl(String videoId) {
         StringBuilder builder = new StringBuilder();
         builder.append("https://www.youtube.com/watch?v=");
@@ -95,14 +93,13 @@ public class YouTubeService {
     }
 
 
-
     private YouTube getYouTube() {
         YouTube youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(),
-                (reqeust) -> {}).setApplicationName("youtube-spring-boot-demo").build();
+                (reqeust) -> {
+                }).setApplicationName("youtube-spring-boot-demo").build();
 
         return youtube;
     }
-
 
 
 }

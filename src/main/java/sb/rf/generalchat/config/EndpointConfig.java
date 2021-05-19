@@ -12,22 +12,22 @@ import sb.rf.generalchat.webSocket.ChatServerEndPoint;
 
 @Configuration
 @EnableWebSocket
-public class EndpointConfig
-{
+public class EndpointConfig {
     @Autowired
     MessageService messageService;
 
     @Autowired
     UserService userService;
+
     @Bean
     @Lazy
-    public ChatServerEndPoint chatEndpointNew(){
-        return new ChatServerEndPoint(userService,messageService);
+    public ChatServerEndPoint chatEndpointNew() {
+        return new ChatServerEndPoint(userService, messageService);
     }
 
 
     @Bean
-    public ServerEndpointExporter endpointExporter(){
+    public ServerEndpointExporter endpointExporter() {
         ServerEndpointExporter endpointExporter = new ServerEndpointExporter();
         endpointExporter.setAnnotatedEndpointClasses(ChatServerEndPoint.class);
         return new ServerEndpointExporter();

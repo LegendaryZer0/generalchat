@@ -62,12 +62,11 @@ public class AccountController {
     public ResponseEntity<User> updateUserById(@RequestBody User user) {
         return ResponseEntity.ok(userService.updateUser(user));
     }
+
     @GetMapping("/dailyonline")
-    public ResponseEntity<Integer> getDailyOnline(){
-       return ResponseEntity.ok(userService.findCountOfDailyChatedUsers());
+    public ResponseEntity<Integer> getDailyOnline() {
+        return ResponseEntity.ok(userService.findCountOfDailyChatedUsers());
     }
-
-
 
 
 }
