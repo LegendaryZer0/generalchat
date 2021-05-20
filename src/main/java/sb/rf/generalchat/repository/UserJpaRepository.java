@@ -17,7 +17,7 @@ public interface UserJpaRepository extends JpaRepository<User, Long> {
     Optional<User> getUserById(Long id);
 
     @Transactional
-    @Query(nativeQuery = true, value = "select * from account where account.id in(select id_to from chats where id_from=:user_id or id_to =:user_id union  select id_from  from chats where id_from=:user_id or id_to =:user_id) and state not like 'BANNED'")
+    @Query(nativeQuery = true, value = "select * from account where account.id in(select id_to from chats where ((id_from=:user_id or id_to =:user_id) and not chats.state = 'BANNED') union  select id_from  from chats where ((id_from=:user_id or id_to =:user_id)and not chats.state = 'BANNED')) ")
     List<User> findAllUserChatsById(@Param("user_id") long id);
 
 

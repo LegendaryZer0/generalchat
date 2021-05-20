@@ -46,6 +46,7 @@ public class MessageServiceImpl implements MessageService, MessageStatisticServi
         messageRepo.save(message);
         Chats chat = chatsRepository.save(Chats.builder().idFrom(message.getIdFrom())
                 .idTo(message.getIdTo())
+                .state(Chats.State.ACTIVE)
                 .build());
         log.info("created chat {}", chat);
     }
