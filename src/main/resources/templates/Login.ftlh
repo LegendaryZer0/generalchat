@@ -19,7 +19,7 @@
     <meta  name = "_csrf"  content = "${_csrf.token}" />
     <! - имя заголовка по умолчанию - X-CSRF-TOKEN ->
     <meta  name = "_csrf_header"  content = "${_csrf.headerName}" />
-    <link rel="stylesheet" type="text/css" href="<@spring.url '/css/LoginCss.css' />" />
+    <link rel="stylesheet" type="text/css" href="<@spring.url '/css/loginCss.css' />" />
 
 
     <@h.headScript></@h.headScript>
