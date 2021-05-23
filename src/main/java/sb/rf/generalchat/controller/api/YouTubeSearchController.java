@@ -4,16 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sb.rf.generalchat.service.YouTubeVideoSearcher;
-
-import java.io.IOException;
+import sb.rf.generalchat.service.YouTubeVideoSearcherService;
 
 @Slf4j
 @RestController
 @RequestMapping("/user")
 public class YouTubeSearchController {
     @Autowired
-    private YouTubeVideoSearcher videoSearcher;
+    private YouTubeVideoSearcherService videoSearcher;
 
     @GetMapping("/getVideosYoutube/{videoName}")
     public ResponseEntity<String> getYouTubeSearch(@PathVariable("videoName") String videoName)  {

@@ -27,7 +27,7 @@ public class BasicOpenIdUser implements OidcUser {
 
     private String nickname;
 
-    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "id", referencedColumnName = "id", nullable = false)
     private User account_user;
     @Id

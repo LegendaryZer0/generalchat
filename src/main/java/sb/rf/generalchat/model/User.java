@@ -3,6 +3,8 @@ package sb.rf.generalchat.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -37,16 +39,18 @@ public class User implements Serializable {
 
     @Column(name = "phone")
     private String phone;
+    @Fetch (FetchMode.SUBSELECT)
     @ToString.Exclude
-    @OneToMany(mappedBy = "userByIdFrom", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "userByIdFrom", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Message> messagesById;
-
-    @OneToMany(mappedBy = "userByIdFrom", fetch = FetchType.EAGER)
+    @Fetch (FetchMode.SUBSELECT)
+    @OneToMany(mappedBy = "userByIdFrom", fetch = FetchType.LAZY)
     private Set<Chats> chatsById;
-
-    @OneToMany(mappedBy = "userByIdTo", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    @OneToMany(mappedBy = "userByIdTo", fetch = FetchType.LAZY)
     private Set<Chats> chatsById_0;
+
     @OneToOne(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     @JsonIgnore

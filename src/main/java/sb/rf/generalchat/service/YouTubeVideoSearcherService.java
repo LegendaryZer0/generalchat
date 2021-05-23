@@ -15,7 +15,7 @@ import java.net.URL;
 
 @Service
 @Slf4j
-public class YouTubeVideoSearcher {
+public class YouTubeVideoSearcherService {
 
     private RestTemplate restTemplate = new RestTemplateBuilder().build();
     @Autowired

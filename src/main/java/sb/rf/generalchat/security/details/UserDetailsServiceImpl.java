@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sb.rf.generalchat.model.User;
 import sb.rf.generalchat.repository.UserJpaRepository;
 
@@ -15,7 +16,7 @@ import sb.rf.generalchat.repository.UserJpaRepository;
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserJpaRepository userJpaRepository;
-
+    @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("users  email ::{}::!", username);
