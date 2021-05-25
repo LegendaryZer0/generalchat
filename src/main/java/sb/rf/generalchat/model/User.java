@@ -2,6 +2,7 @@ package sb.rf.generalchat.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -9,15 +10,21 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Duration;
 import java.util.Objects;
 import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
+@ToString(onlyExplicitlyIncluded = true)
+
 @Entity
-@Table(name = "account")
+@Table(name = "account", indexes = {
+        @Index(name = "IDX_USER_email", columnList = "email")
+})
 @DynamicUpdate
 public class User implements Serializable {
 
@@ -31,33 +38,29 @@ public class User implements Serializable {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Type(type = "long")
     private Long id;
 
-    @Column(name = "nickname", nullable = true)
+    @Column(name = "nickname")
     private String nickname;
 
     @Column(name = "phone")
     private String phone;
     @Fetch (FetchMode.SUBSELECT)
-    @ToString.Exclude
-    @OneToMany(mappedBy = "userByIdFrom", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userByIdFrom")
     @JsonIgnore
     private Set<Message> messagesById;
     @Fetch (FetchMode.SUBSELECT)
-    @OneToMany(mappedBy = "userByIdFrom", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userByIdFrom")
     private Set<Chats> chatsById;
     @Fetch(FetchMode.SUBSELECT)
-    @OneToMany(mappedBy = "userByIdTo", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userByIdTo")
     private Set<Chats> chatsById_0;
 
     @OneToOne(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
     @JsonIgnore
     private TechnicalInfo technicalInfo;
 
     @OneToOne(mappedBy = "account_user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
     @JsonIgnore
     private BasicOpenIdUser basicOpenIdUser;
 
@@ -71,19 +74,6 @@ public class User implements Serializable {
         return this.getState().toString().equals("ACTIVE");
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(id, user.id) && Objects.equals(nickname, user.nickname) && Objects.equals(phone, user.phone);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(email, password, id, nickname, phone);
-    }
-
 
     public enum Role {
         ADMIN, USER, MODERATOR
@@ -93,7 +83,18 @@ public class User implements Serializable {
         ACTIVE, BANNED, FROZEN
     }
 
+ //Так ли это делается?
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        User user = (User) o;
 
+        return id != null && id.equals(user.id);
+    }
 
-
+    @Override
+    public int hashCode() { // Todo разобраться,не стоит ли сюда так же дописывать id?(хеш мапы сейчас испорченные)
+        return 562048007;
+    }
 }

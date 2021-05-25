@@ -1,9 +1,7 @@
 package sb.rf.generalchat.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,7 +11,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
+@ToString
+
 @Entity
 
 @Table(name = "technical_Info", schema = "public")
@@ -31,25 +32,25 @@ public class TechnicalInfo   implements Serializable {
     private ConfirmState confirmState;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", referencedColumnName = "id", nullable = false)
+    @ToString.Exclude
     private User userId;
 
     public enum ConfirmState{
         CONFIRMED,NONE_CONFIRMED
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         TechnicalInfo that = (TechnicalInfo) o;
-        return Objects.equals(uuid, that.uuid) && Objects.equals(id, that.id) && Objects.equals(isDeleted, that.isDeleted) && Objects.equals(confirmState, that.confirmState);
+
+        return id != null && id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, id, isDeleted, confirmState);
+        return 728922588;
     }
-
-
-
 }

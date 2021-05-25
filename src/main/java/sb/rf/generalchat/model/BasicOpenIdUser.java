@@ -1,9 +1,7 @@
 package sb.rf.generalchat.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
@@ -12,7 +10,9 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Map;
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor
@@ -29,6 +29,7 @@ public class BasicOpenIdUser implements OidcUser {
 
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "id", referencedColumnName = "id", nullable = false)
+    @ToString.Exclude
     private User account_user;
     @Id
     private String name;
@@ -86,5 +87,19 @@ public class BasicOpenIdUser implements OidcUser {
                                 .build())
                         .build()).build();
         return basicOpenIdUser;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        BasicOpenIdUser that = (BasicOpenIdUser) o;
+
+        return name != null && name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return 2068085731;
     }
 }

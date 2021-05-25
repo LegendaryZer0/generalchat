@@ -3,6 +3,9 @@ package sb.rf.generalchat.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -59,6 +62,7 @@ public class GoogleOidcServiceImpl implements GoogleOidcService {
 
 
     private void setAuthenticationForce(BasicOpenIdUser basicOpenIdUser, HttpServletRequest request) {
+
         UserDetails userDetails = userDetailsService.loadUserByUsername(basicOpenIdUser.getEmail());
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 userDetails, null, userDetails.getAuthorities());

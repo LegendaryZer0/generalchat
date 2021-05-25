@@ -1,6 +1,7 @@
 package sb.rf.generalchat.model;
 
 import lombok.*;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -12,7 +13,10 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
+@ToString
+
 public class Message  implements Serializable {
     @Type(type = "long")
     private Long idTo;
@@ -76,19 +80,17 @@ public class Message  implements Serializable {
     }
 
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Message message1 = (Message) o;
-        return Objects.equals(idTo, message1.idTo) && Objects.equals(idFrom, message1.idFrom) && Objects.equals(message, message1.message) && Objects.equals(time, message1.time) && Objects.equals(idPk, message1.idPk);
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Message message = (Message) o;
+
+        return idPk != null && idPk.equals(message.idPk);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idTo, idFrom, message, time, idPk);
+        return 1996936819;
     }
-
-
 }

@@ -9,7 +9,10 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
+@ToString
+
 @Entity
 @IdClass(ChatsPK.class)
 public class Chats implements Serializable {
