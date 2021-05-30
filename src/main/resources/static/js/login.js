@@ -80,7 +80,7 @@
             },
             statusCode:{
                 200:function (){
-                    window.location.replace('user/selfProfile'); //Todo Спросить, как правильней это обрабатывать
+                    window.location.replace('user/selfProfile');
                 },
                 203:function (){
                     console.log("Показываю результат ajax")

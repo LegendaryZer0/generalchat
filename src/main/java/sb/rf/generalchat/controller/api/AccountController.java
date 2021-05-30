@@ -44,7 +44,7 @@ public class AccountController {
 
     @PostMapping("/account/reg")
     public ResponseEntity<User> basicAddUser(RegistrationDto dto) {
-        return ResponseEntity.ok(userService.addUser(dto.getUser()));
+        return ResponseEntity.ok(userService.addUser(dto.returnUser()));
     }
 
 
