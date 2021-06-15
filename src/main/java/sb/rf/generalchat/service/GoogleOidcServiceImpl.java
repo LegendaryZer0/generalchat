@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sb.rf.generalchat.model.BasicOpenIdUser;
 import sb.rf.generalchat.model.User;
 import sb.rf.generalchat.repository.GoogleOidcRepo;
@@ -38,6 +39,7 @@ public class GoogleOidcServiceImpl implements GoogleOidcService {
     private MessageService messageService;
 
     @Override
+
     public void processOAuthPostLogin(OidcUser oidcUser, HttpServletRequest request) {
         log.info("Now i need save , {}", oidcUser);
         Optional<User> userAccount = userRepository.getUserByEmail(oidcUser.getEmail());
@@ -81,7 +83,7 @@ public class GoogleOidcServiceImpl implements GoogleOidcService {
 
         log.info("ended");
     }
-
+    @Transactional
     private void createUserAccountFromGoogleOidc(OidcUser oidcUser, HttpServletRequest request) {
         BasicOpenIdUser basicOpenIdUser = BasicOpenIdUser.from(oidcUser);
         BasicOpenIdUser googleUser = googleOidcRepo.save(basicOpenIdUser);
@@ -89,7 +91,7 @@ public class GoogleOidcServiceImpl implements GoogleOidcService {
         setAuthenticationForce(basicOpenIdUser, request);
     }
 
-
+    @Transactional
     private void updateUsersGoogleOidcPart(OidcUser oidcUser, User userAccount, HttpServletRequest request) {
         BasicOpenIdUser basicOpenIdUser = BasicOpenIdUser.builder()
                 .oidcUser(oidcUser)

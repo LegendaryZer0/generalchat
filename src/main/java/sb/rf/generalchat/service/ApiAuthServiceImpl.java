@@ -46,6 +46,8 @@ public class ApiAuthServiceImpl implements ApiAuthService {
             String accessToken = generateAccessToken(userLoginDto.getLogin());
             Cookie refreshTokenCookie = new Cookie("refresh_token", refreshToken.toString());
             Cookie accessTokenCookie = new Cookie("access_token", accessToken);
+            refreshTokenCookie.setPath("/api");
+            accessTokenCookie.setPath("/api");
             addHttpOnlyCookiesToUser(response, refreshTokenCookie, accessTokenCookie);
             addUserInRedis(userOptional.get(), refreshToken.toString(), deviceName);
 
@@ -75,7 +77,7 @@ public class ApiAuthServiceImpl implements ApiAuthService {
     }
 
     public String generateAccessToken(String email) {
-
+        log.info("email {}",email);
         return jwtUtil.generateToken(userDetailsService.loadUserByUsername(email));
     }
 

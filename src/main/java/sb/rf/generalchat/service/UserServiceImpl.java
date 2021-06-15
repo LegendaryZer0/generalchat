@@ -121,7 +121,8 @@ public class UserServiceImpl implements UserService {
     }
 
     public List<User> getAllUsers() {
-        return userRepository.getAllByTechnicalInfo_IsDeletedFalse();
+        log.info("getting all users {}", userRepository.getAllByTechnicalInfo_IsDeletedFalse());
+        return userRepository.findAll();
     }
 
     public List<User> getAllUsersForce() {

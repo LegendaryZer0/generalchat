@@ -36,6 +36,8 @@ public interface UserJpaRepository extends JpaRepository<User, Long> {
     @Transactional
     List<User> getAllByTechnicalInfo_IsDeletedFalse();
 
+
+
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "update technical_info  set isdeleted=true where technical_info.id in(select id from account where account.email=:email) ")

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.mobile.device.DeviceResolverRequestFilter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,12 +17,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import sb.rf.generalchat.filter.AccesTokenFilter;
 import sb.rf.generalchat.filter.RefreshTokenFilter;
+
 import sb.rf.generalchat.security.handler.SignInFailHandler;
+import sb.rf.generalchat.security.provider.JWTAuthProvider;
 
 import javax.sql.DataSource;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @Order(1)
 public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
@@ -38,6 +41,12 @@ public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private RefreshTokenFilter refreshTokenFilter;
 
+//    @Autowired
+//    private TokenAuthenticateFilter tokenAuthenticateFilter;
+
+    @Autowired
+    private JWTAuthProvider provider;
+
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
@@ -47,7 +56,8 @@ public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) {
         try {
 
-            auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+            auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder)
+            .and().authenticationProvider(provider);
         } catch (Exception e) {
             throw new IllegalStateException(e);
 
@@ -64,7 +74,10 @@ public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/**").hasAuthority("ADMIN")
         ;
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().addFilterBefore(refreshTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(accesTokenFilter, refreshTokenFilter.getClass()).antMatcher("/api/**");
+                .and().addFilterBefore(new DeviceResolverRequestFilter(),UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(refreshTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(accesTokenFilter, refreshTokenFilter.getClass())
+//                .addFilterAfter(tokenAuthenticateFilter,refreshTokenFilter.getClass())
+                .antMatcher("/api/**");
     }
 }

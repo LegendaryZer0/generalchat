@@ -22,6 +22,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Collections;
+import java.util.function.Function;
 
 @Import({AppConfig.class, SecurityBasicConfig.class, LocalizationConfig.class})
 @SpringBootApplication
@@ -55,8 +56,25 @@ public class GeneralchatApplication {
         );
     }
 
+    Function
+
     public static void main(String[] args) {
+
+
+        Integer w1 = new Integer(2);
+        Integer w2 = new Integer(2);
+        if(w1.equals(w2)){
+            System.out.println("equal");
+        }else {
+            System.out.println("not equal");
+        }
+
+
         SpringApplication.run(GeneralchatApplication.class, args);
+
+
+
+
     }
     @Bean
     public PasswordEncoder bcryptpasswordEncoder(){

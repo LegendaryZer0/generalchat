@@ -1,6 +1,7 @@
 package sb.rf.generalchat.security.authentication;
 
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -8,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Collection;
 import java.util.Collections;
 @ToString
+@Slf4j
 public class JWTAuthentication implements Authentication {
 
 
@@ -29,6 +31,7 @@ public class JWTAuthentication implements Authentication {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        log.info("authority of user {}",authority);
         return  Collections.singleton(new SimpleGrantedAuthority(authority));
     }
 

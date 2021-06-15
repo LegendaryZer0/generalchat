@@ -6,18 +6,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.mobile.device.Device;
 import org.springframework.mobile.device.DeviceUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import sb.rf.generalchat.security.authentication.JWTAuthentication;
 import sb.rf.generalchat.service.RefreshTokenService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 @Slf4j
@@ -28,26 +32,35 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
     private RefreshTokenService refreshTokenService;
 
 
+
     @Autowired
     private ObjectMapper objectMapper;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-      log.info("Refresh work start work");
+      log.info("refresh token started to work");
         if (response.getStatus() == 403) {
+            log.info("It seems like access token is expired");
             Device device = DeviceUtils.getCurrentDevice(request);
+            log.info("device {}",device);
             String deviceName = device.getDevicePlatform().name();
 
             Optional<Cookie> refreshTokenOptional = Arrays.stream(request.getCookies()).filter(x -> x.getName().equals("refresh_token")).findFirst();
             Optional<Cookie> accessToken = Arrays.stream(request.getCookies()).filter(x -> x.getName().equals("access_token")).findFirst();
-            String refreshToken = objectMapper.readValue(refreshTokenOptional.orElseThrow(IllegalStateException::new).getValue(), String.class);
-            Pair<String, String> tokens = refreshTokenService.getRefreshAccessTokensWithRotation(refreshToken, accessToken.orElseThrow(IllegalStateException::new).getValue(), deviceName);
+            Arrays.stream(request.getCookies()).forEach(x->log.info("cookie name {} and value {} ",x.getName(),x.getValue()));
+            String refreshToken = refreshTokenOptional.orElseThrow(IllegalStateException::new).getValue();
+            log.info("refresh token is {}",refreshToken);
+            log.info("expired access token {}",accessToken.get().getValue());
 
+            Pair<String, String> tokens = refreshTokenService.getRefreshAccessTokensWithRotation(refreshToken, accessToken.get().getValue(), deviceName);
             Cookie accessTokenCookie = new Cookie("access_token", tokens.getFirst());
             Cookie refreshTokenCookie = new Cookie("refresh_token", tokens.getSecond());
             addHttpOnlyCookiesToUser(response,accessTokenCookie,refreshTokenCookie);
+
+
             response.setStatus(200);
-        } else filterChain.doFilter(request, response);
+        }
+        filterChain.doFilter(request, response);
 
     }
     private void addHttpOnlyCookiesToUser(HttpServletResponse response, Cookie... cookies) {

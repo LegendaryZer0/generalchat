@@ -17,6 +17,7 @@ import sb.rf.generalchat.service.ApiAuthService;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletResponse;
+import java.util.function.Function;
 
 @RestController
 @Slf4j
@@ -37,6 +38,7 @@ public class AuthenticateController {
     @PermitAll
     public ResponseEntity<?> resolveAccess(@RequestBody UserLoginDto userLoginDto, Device device, HttpServletResponse response) {
         try {
+
             log.info("user ti authenticate {}", userLoginDto);
             apiAuthService.processUser(userLoginDto, response, device.getDevicePlatform().name());
         } catch (BadCredentialsException e) {
