@@ -12,36 +12,47 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-
 @Entity
 @IdClass(ChatsPK.class)
 public class Chats implements Serializable {
 
-   @Id
-   @Column(name = "id_from", nullable = false)
-    private Long idFrom;
+  @Id
+  @Column(name = "id_from", nullable = false)
+  private Long idFrom;
 
-    @Id
-    @Column(name = "id_to" )
-    private Long idTo;
+  @Id
+  @Column(name = "id_to")
+  private Long idTo;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "state")
-    private State state;
+  @Enumerated(EnumType.STRING)
+  @Column(name = "state")
+  private State state;
 
-    @ToString.Exclude
-    @ManyToOne
-    @JoinColumn(name = "id_from", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
-    @JsonIgnore
-    private User userByIdFrom;
-    @ToString.Exclude
-    @ManyToOne
-    @JoinColumn(name = "id_to", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
-    @JsonIgnore
-    private User userByIdTo;
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(
+      name = "id_from",
+      referencedColumnName = "id",
+      nullable = false,
+      insertable = false,
+      updatable = false)
+  @JsonIgnore
+  private User userByIdFrom;
 
-    public  enum  State{
-     BLOCKED,ACTIVE,BANNED
-    }
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(
+      name = "id_to",
+      referencedColumnName = "id",
+      nullable = false,
+      insertable = false,
+      updatable = false)
+  @JsonIgnore
+  private User userByIdTo;
 
+  public enum State {
+    BLOCKED,
+    ACTIVE,
+    BANNED
+  }
 }

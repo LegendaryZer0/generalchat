@@ -6,14 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import sb.rf.generalchat.service.UserService;
 
-
 @Controller
 public class MailController {
-    @Autowired
-    UserService userService;
-    @GetMapping("/confirm")
-    public String confirmAccount(@RequestParam Long id){
-        userService.confirmEmail(id);
-        return "Login";
-    }
+  @Autowired UserService userService;
+
+  @GetMapping("/confirm")
+  public String confirmAccount(@RequestParam Long id) {
+    userService.confirmEmail(id);
+    return "Login";
+  }
 }

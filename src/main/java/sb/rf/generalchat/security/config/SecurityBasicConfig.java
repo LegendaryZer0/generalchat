@@ -37,93 +37,89 @@ import javax.sql.DataSource;
 @Slf4j
 public class SecurityBasicConfig extends WebSecurityConfigurerAdapter {
 
+  @Autowired private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    @Qualifier("activeUserDetailsService")
-    private UserDetailsService userDetailsService;
-    @Autowired
-    private DataSource dataSource;
-    @Autowired
-    private SignInFailHandler signInFailHandler;
+  @Autowired
+  @Qualifier("activeUserDetailsService")
+  private UserDetailsService userDetailsService;
 
-    @Autowired
-    private CustomOAuth2UserService oauthUserService;
-    @Autowired
-    private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService;
+  @Autowired private DataSource dataSource;
+  @Autowired private SignInFailHandler signInFailHandler;
 
+  @Autowired private CustomOAuth2UserService oauthUserService;
+  @Autowired private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService;
 
-    @Autowired
-    private GoogleOidcService service;
+  @Autowired private GoogleOidcService service;
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) {
-        try {
-            auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-
-        }
-
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) {
+    try {
+      auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+    } catch (Exception e) {
+      throw new IllegalStateException(e);
     }
+  }
 
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    CharacterEncodingFilter filter = new CharacterEncodingFilter();
+    filter.setEncoding("UTF-8");
+    filter.setForceEncoding(true);
+    http.addFilterBefore(filter, CsrfFilter.class)
+        .authorizeRequests()
+        // and something matchers here
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        CharacterEncodingFilter filter = new CharacterEncodingFilter();
-        filter.setEncoding("UTF-8");
-        filter.setForceEncoding(true);
-        http.addFilterBefore(filter, CsrfFilter.class)
-                .authorizeRequests()
-                //and something matchers here
+        .antMatchers("/admin/**")
+        .hasAnyAuthority("ADMIN") //
+        .antMatchers("/user/**")
+        .hasAnyAuthority("USER", "ADMIN", "MODER") /*.hasAnyRole("ADMIN", "MODER", "USER")*/
+        .antMatchers("/authenticate/**", "/**", "css/**", "js/**")
+        .permitAll()
+        .and()
+        .formLogin()
+        .failureHandler(signInFailHandler)
+        .loginPage("/login")
+        .loginProcessingUrl("/login")
+        .permitAll()
+        .usernameParameter("email")
+        .defaultSuccessUrl("/user/selfProfile")
+        .failureUrl("/loginFail")
+        .and()
+        .logout()
+        .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+        .invalidateHttpSession(true)
+        .deleteCookies("JSESSIONID")
+        .and()
+        .rememberMe()
+        .rememberMeParameter("remember_me")
+        .tokenRepository(persistentTokenRepository())
+        .and()
+        .oauth2Login()
+        .loginPage("/login")
+        .userInfoEndpoint()
+        .oidcUserService(oidcUserService)
+        .userService(oauthUserService)
+        .and()
+        .successHandler(
+            (request, response, authentication) -> {
+              DefaultOidcUser oidcUser = (DefaultOidcUser) authentication.getPrincipal();
+              log.info("oauthUser from config {}", oidcUser);
+              authentication.setAuthenticated(true);
+              log.info("aouth principals before precess {}", authentication.getPrincipal());
+              service.processOAuthPostLogin(oidcUser, request);
+              log.info("aouth principals after precess {}", authentication.getPrincipal());
 
-                .antMatchers("/admin/**").hasAnyAuthority("ADMIN") //
-                .antMatchers("/user/**").hasAnyAuthority("USER", "ADMIN", "MODER")/*.hasAnyRole("ADMIN", "MODER", "USER")*/
-                .antMatchers("/authenticate/**", "/**", "css/**", "js/**").permitAll()
-                .and()
-                .formLogin().failureHandler(signInFailHandler)
-                .loginPage("/login").loginProcessingUrl("/login").permitAll()
-                .usernameParameter("email")
-                .defaultSuccessUrl("/user/selfProfile")
+              response.sendRedirect("/user/selfProfile");
+            })
+        .and()
+        .csrf()
+        .ignoringAntMatchers("/api/**", "/authenticate/**");
+  }
 
-                .failureUrl("/loginFail")
-                .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .and().rememberMe().rememberMeParameter("remember_me").tokenRepository(persistentTokenRepository())
-                .and()
-
-                .oauth2Login()
-                .loginPage("/login")
-                .userInfoEndpoint()
-                .oidcUserService(oidcUserService)
-                .userService(oauthUserService)
-                .and()
-                .successHandler((request, response, authentication) -> {
-
-                    DefaultOidcUser oidcUser = (DefaultOidcUser) authentication.getPrincipal();
-                    log.info("oauthUser from config {}", oidcUser);
-                    authentication.setAuthenticated(true);
-                    log.info("aouth principals before precess {}", authentication.getPrincipal());
-                    service.processOAuthPostLogin(oidcUser, request);
-                    log.info("aouth principals after precess {}", authentication.getPrincipal());
-
-                    response.sendRedirect("/user/selfProfile");
-                }).and()
-                .csrf()
-                .ignoringAntMatchers("/api/**", "/authenticate/**")
-        ;
-
-    }
-
-
-    @Bean
-    public PersistentTokenRepository persistentTokenRepository() {
-        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
-        jdbcTokenRepository.setDataSource(dataSource);
-        return jdbcTokenRepository;
-    }
-
-
+  @Bean
+  public PersistentTokenRepository persistentTokenRepository() {
+    JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+    jdbcTokenRepository.setDataSource(dataSource);
+    return jdbcTokenRepository;
+  }
 }

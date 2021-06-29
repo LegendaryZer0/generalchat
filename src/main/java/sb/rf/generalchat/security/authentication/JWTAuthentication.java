@@ -8,60 +8,56 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
 import java.util.Collections;
+
 @ToString
 @Slf4j
 public class JWTAuthentication implements Authentication {
 
+  private final String token;
+  private boolean isAuthenticated;
+  private String authority;
 
-    private boolean isAuthenticated;
+  public JWTAuthentication(String token) {
+    this.token = token;
+  }
 
-    private final String token;
+  public void setAuthority(String authority) {
+    this.authority = authority;
+  }
 
-    private String authority;
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    log.info("authority of user {}", authority);
+    return Collections.singleton(new SimpleGrantedAuthority(authority));
+  }
 
+  @Override
+  public Object getCredentials() {
+    return null;
+  }
 
-    public JWTAuthentication(String token) {
-        this.token = token;
-    }
+  @Override
+  public Object getDetails() {
+    return null;
+  }
 
-    public void setAuthority(String authority) {
-        this.authority = authority;
-    }
+  @Override
+  public Object getPrincipal() {
+    return null;
+  }
 
+  @Override
+  public boolean isAuthenticated() {
+    return isAuthenticated;
+  }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        log.info("authority of user {}",authority);
-        return  Collections.singleton(new SimpleGrantedAuthority(authority));
-    }
+  @Override
+  public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+    this.isAuthenticated = isAuthenticated;
+  }
 
-    @Override
-    public Object getCredentials() {
-        return null;
-    }
-
-    @Override
-    public Object getDetails() {
-        return null;
-    }
-
-    @Override
-    public Object getPrincipal() {
-        return null;
-    }
-
-    @Override
-    public boolean isAuthenticated() {
-        return isAuthenticated;
-    }
-
-    @Override
-    public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
-            this.isAuthenticated = isAuthenticated;
-    }
-
-    @Override
-    public String getName() {
-        return token;
-    }
+  @Override
+  public String getName() {
+    return token;
+  }
 }

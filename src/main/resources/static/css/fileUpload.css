@@ -1,0 +1,11 @@
+.image-preview{
+    display: none;
+    max-width:150px;
+    max-height: 200px;
+}
+.image-preview__image{
+    display: none;
+    max-width:150px;
+    max-height: 200px;
+
+}

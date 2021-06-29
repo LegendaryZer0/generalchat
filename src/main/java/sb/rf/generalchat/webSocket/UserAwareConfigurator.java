@@ -9,11 +9,11 @@ import javax.websocket.server.ServerEndpointConfig;
 
 public class UserAwareConfigurator extends ServerEndpointConfig.Configurator {
 
-    @Override
-    public void modifyHandshake(ServerEndpointConfig config, HandshakeRequest request, HandshakeResponse response) {
-        HttpSession httpSession = (HttpSession) request.getHttpSession();
-        User user = (User) httpSession.getAttribute("user");
-        config.getUserProperties().put("user", user);
-    }
-
+  @Override
+  public void modifyHandshake(
+      ServerEndpointConfig config, HandshakeRequest request, HandshakeResponse response) {
+    HttpSession httpSession = (HttpSession) request.getHttpSession();
+    User user = (User) httpSession.getAttribute("user");
+    config.getUserProperties().put("user", user);
+  }
 }

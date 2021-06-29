@@ -13,17 +13,13 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 @Data
-
 public class ChatsPK implements Serializable {
 
-    @Column(name = "id_from", nullable = false)
-    @Id
-    private Long idFrom;
-    @Id
-    @Column(name = "id_to" )
-    private Long idTo;
+  @Column(name = "id_from", nullable = false)
+  @Id
+  private Long idFrom;
 
-
-
-
+  @Id
+  @Column(name = "id_to")
+  private Long idTo;
 }

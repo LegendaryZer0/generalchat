@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class OidcService extends OidcUserService {
-    @Override
-    public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
-        OidcUser oidcUser= super.loadUser(userRequest);
-        log.info(" oidc user :: {}", userRequest.toString());
-        return oidcUser;
-    }
+  @Override
+  public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
+    OidcUser oidcUser = super.loadUser(userRequest);
+    log.info(" oidc user :: {}", userRequest.toString());
+    return oidcUser;
+  }
 }

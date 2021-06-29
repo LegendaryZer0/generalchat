@@ -17,11 +17,7 @@ import java.io.Serializable;
 @RedisHash("user")
 public class RedisUser implements Serializable {
 
-    @Id
-    private String refreshToken;
-    @Indexed
-    private Long userId;
-    @Indexed
-    private String deviceName;
-
+  @Id private String refreshToken;
+  @Indexed private Long userId;
+  @Indexed private String deviceName;
 }

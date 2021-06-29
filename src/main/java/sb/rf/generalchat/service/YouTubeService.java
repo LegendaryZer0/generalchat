@@ -20,86 +20,76 @@ import java.util.List;
 @Service
 public class YouTubeService {
 
-    private static final long MAX_SEARCH_RESULTS = 7;
+  private static final long MAX_SEARCH_RESULTS = 7;
 
+  public List<YouTubeVideo> fetchVideosByQuery(String queryTerm) {
+    List<YouTubeVideo> videos = new ArrayList<YouTubeVideo>();
 
-    public List<YouTubeVideo> fetchVideosByQuery(String queryTerm) {
-        List<YouTubeVideo> videos = new ArrayList<YouTubeVideo>();
+    try {
 
-        try {
+      YouTube youtube = getYouTube();
 
-            YouTube youtube = getYouTube();
+      YouTube.Search.List search = youtube.search().list("id,snippet");
 
+      String apiKey = "AIzaSyAea0nVkFuNfkN296MN0MYVjxog0dRb5-Q";
+      search.setKey(apiKey);
 
-            YouTube.Search.List search = youtube.search().list("id,snippet");
+      search.setQ(queryTerm);
 
+      search.setType("video");
 
-            String apiKey = "AIzaSyAea0nVkFuNfkN296MN0MYVjxog0dRb5-Q";
-            search.setKey(apiKey);
+      search.setFields(
+          "items(id/kind,id/videoId,snippet/title,snippet/description,snippet/publishedAt,snippet/thumbnails/default/url)");
 
+      search.setMaxResults(MAX_SEARCH_RESULTS);
 
-            search.setQ(queryTerm);
+      DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
 
+      SearchListResponse searchResponse = search.execute();
+      log.info("base url {}", youtube.getBaseUrl());
+      log.info(" servicepath {}", youtube.getServicePath());
+      log.info("search object is {}", search.toString());
+      log.info("UriTemplate is {}", search.getUriTemplate());
+      List<SearchResult> searchResultList = searchResponse.getItems();
+      if (searchResultList != null) {
+        for (SearchResult result : searchResultList) {
+          YouTubeVideo video = new YouTubeVideo();
+          video.setTitle(result.getSnippet().getTitle());
+          video.setUrl(buildVideoUrl(result.getId().getVideoId()));
 
-            search.setType("video");
+          video.setThumbnailUrl(result.getSnippet().getThumbnails().getDefault().getUrl());
+          video.setDescription(result.getSnippet().getDescription());
 
+          // parse the date
+          DateTime dateTime = result.getSnippet().getPublishedAt();
+          Date date = new Date(dateTime.getValue());
+          String dateString = df.format(date);
+          video.setPublishDate(dateString);
 
-            search.setFields("items(id/kind,id/videoId,snippet/title,snippet/description,snippet/publishedAt,snippet/thumbnails/default/url)");
-
-
-            search.setMaxResults(MAX_SEARCH_RESULTS);
-
-            DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-
-
-            SearchListResponse searchResponse = search.execute();
-            log.info("base url {}", youtube.getBaseUrl());
-            log.info(" servicepath {}", youtube.getServicePath());
-            log.info("search object is {}", search.toString());
-            log.info("UriTemplate is {}", search.getUriTemplate());
-            List<SearchResult> searchResultList = searchResponse.getItems();
-            if (searchResultList != null) {
-                for (SearchResult result : searchResultList) {
-                    YouTubeVideo video = new YouTubeVideo();
-                    video.setTitle(result.getSnippet().getTitle());
-                    video.setUrl(buildVideoUrl(result.getId().getVideoId()));
-
-                    video.setThumbnailUrl(result.getSnippet().getThumbnails().getDefault().getUrl());
-                    video.setDescription(result.getSnippet().getDescription());
-
-                    //parse the date
-                    DateTime dateTime = result.getSnippet().getPublishedAt();
-                    Date date = new Date(dateTime.getValue());
-                    String dateString = df.format(date);
-                    video.setPublishDate(dateString);
-
-                    videos.add(video);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+          videos.add(video);
         }
-
-        return videos;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
 
+    return videos;
+  }
 
-    private String buildVideoUrl(String videoId) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("https://www.youtube.com/watch?v=");
-        builder.append(videoId);
+  private String buildVideoUrl(String videoId) {
+    StringBuilder builder = new StringBuilder();
+    builder.append("https://www.youtube.com/watch?v=");
+    builder.append(videoId);
 
-        return builder.toString();
-    }
+    return builder.toString();
+  }
 
+  private YouTube getYouTube() {
+    YouTube youtube =
+        new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), (reqeust) -> {})
+            .setApplicationName("youtube-spring-boot-demo")
+            .build();
 
-    private YouTube getYouTube() {
-        YouTube youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(),
-                (reqeust) -> {
-                }).setApplicationName("youtube-spring-boot-demo").build();
-
-        return youtube;
-    }
-
-
+    return youtube;
+  }
 }

@@ -20,6 +20,10 @@ public class MessagesDto {
     private Long to;
     private String message;
     private Timestamp time;
+    private MessageType type;
+    public enum MessageType{
+        DOCUMENT,STRING
+    }
 
     public static MessagesDto from(Message message){
         return MessagesDto.builder().from(message.getIdFrom()).to(message.getIdTo()).message(message.getMessage()).build();
