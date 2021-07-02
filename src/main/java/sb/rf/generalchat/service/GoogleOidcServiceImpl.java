@@ -82,7 +82,7 @@ public class GoogleOidcServiceImpl implements GoogleOidcService {
   }
 
   @Transactional
-  private void createUserAccountFromGoogleOidc(OidcUser oidcUser, HttpServletRequest request) {
+  public void createUserAccountFromGoogleOidc(OidcUser oidcUser, HttpServletRequest request) {
     BasicOpenIdUser basicOpenIdUser = BasicOpenIdUser.from(oidcUser);
     BasicOpenIdUser googleUser = googleOidcRepo.save(basicOpenIdUser);
     messageService.sendWelcomeMessage(googleUser.getAccount_user().getId());
@@ -90,13 +90,13 @@ public class GoogleOidcServiceImpl implements GoogleOidcService {
   }
 
   @Transactional
-  private void updateUsersGoogleOidcPart(
+  public void updateUsersGoogleOidcPart(
       OidcUser oidcUser, User userAccount, HttpServletRequest request) {
     BasicOpenIdUser basicOpenIdUser =
         BasicOpenIdUser.builder()
             .oidcUser(oidcUser)
             .email(oidcUser.getEmail())
-            .name(oidcUser.getName())
+            .username(oidcUser.getName())
             .nickname(oidcUser.getFullName())
             .build();
     userAccount.setBasicOpenIdUser(basicOpenIdUser);

@@ -16,12 +16,12 @@ import java.util.Set;
 @Builder
 @Getter
 @Setter
-@ToString(onlyExplicitlyIncluded = true)
 @Entity
 @Table(
     name = "account",
     indexes = {@Index(name = "IDX_USER_email", columnList = "email")})
 @DynamicUpdate
+@ToString
 public class User implements Serializable {
 
   @Column(name = "email", nullable = false, unique = true)
@@ -41,22 +41,22 @@ public class User implements Serializable {
   @Column(name = "phone")
   private String phone;
 
-  @Fetch(FetchMode.SUBSELECT)
-  @OneToMany(mappedBy = "userByIdFrom")
+ // @Fetch(FetchMode.SUBSELECT)
+  @OneToMany(mappedBy = "userByIdFrom",fetch = FetchType.EAGER)
   @JsonIgnore
   private Set<Message> messagesById;
 
-  @Fetch(FetchMode.SUBSELECT)
-  @OneToMany(mappedBy = "userByIdFrom")
+//  @Fetch(FetchMode.SUBSELECT)
+  @OneToMany(mappedBy = "userByIdFrom",fetch = FetchType.EAGER)
   private Set<Chats> chatsById;
 
-  @Fetch(FetchMode.SUBSELECT)
-  @OneToMany(mappedBy = "userByIdTo")
+//  @Fetch(FetchMode.SUBSELECT)
+  @OneToMany(mappedBy = "userByIdTo",fetch = FetchType.EAGER)
   private Set<Chats> chatsById_0;
 
   @OneToOne(
       mappedBy = "userId",
-      fetch = FetchType.LAZY,
+      fetch = FetchType.EAGER,
       cascade = CascadeType.ALL,
       orphanRemoval = true)
   @JsonIgnore
@@ -64,7 +64,7 @@ public class User implements Serializable {
 
   @OneToOne(
       mappedBy = "account_user",
-      fetch = FetchType.LAZY,
+      fetch = FetchType.EAGER,
       cascade = CascadeType.ALL,
       orphanRemoval = true)
   @JsonIgnore

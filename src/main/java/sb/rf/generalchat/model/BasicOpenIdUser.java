@@ -31,14 +31,14 @@ public class BasicOpenIdUser implements OidcUser {
   @ToString.Exclude
   private User account_user;
 
-  @Id private String name;
+  @Id private String username;
 
   public static BasicOpenIdUser from(OidcUser oidcUser) {
     BasicOpenIdUser basicOpenIdUser =
         BasicOpenIdUser.builder()
             .oidcUser(oidcUser)
             .email(oidcUser.getEmail())
-            .name(oidcUser.getName())
+            .username(oidcUser.getName())
             .nickname(oidcUser.getFullName())
             .account_user(
                 User.builder()
@@ -87,11 +87,7 @@ public class BasicOpenIdUser implements OidcUser {
     return oidcUser.getAuthorities();
   }
 
-  @Transient
-  @Override
-  public String getName() {
-    return oidcUser.getName();
-  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -99,11 +95,17 @@ public class BasicOpenIdUser implements OidcUser {
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
     BasicOpenIdUser that = (BasicOpenIdUser) o;
 
-    return name != null && name.equals(that.name);
+    return username != null && username.equals(that.username);
   }
 
   @Override
   public int hashCode() {
     return 2068085731;
+  }
+
+  @Transient
+  @Override
+  public String getName() {
+    return oidcUser.getName();
   }
 }

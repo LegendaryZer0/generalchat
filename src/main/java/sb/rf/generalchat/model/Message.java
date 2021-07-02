@@ -3,6 +3,8 @@ package sb.rf.generalchat.model;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Type;
+import sb.rf.generalchat.encryption.LongAttributeEncryptor;
+import sb.rf.generalchat.encryption.StringAttributeEncryptor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,16 +18,19 @@ import java.sql.Timestamp;
 @Setter
 @ToString
 public class Message implements Serializable {
-  @Type(type = "long")
+ /* @Type(type = "long")*/
+  @Convert(converter = LongAttributeEncryptor.class)
+  @Column(name = "id_to", nullable = true)
   private Long idTo;
 
   @Type(type = "long")
   @Basic
   @Column(name = "id_from", nullable = true)
   private Long idFrom;
-
-  @Column(columnDefinition = "text")
+  @Convert(converter = StringAttributeEncryptor.class)
+  @Column(columnDefinition = "text",name = "Message")
   private String message;
+
 
   private Timestamp time;
 
@@ -42,32 +47,18 @@ public class Message implements Serializable {
 
   @Enumerated(EnumType.STRING)
   private MessageStatus messageStatus; // Todo Stomp протокол
-
-  @Column(name = "id_to", nullable = true)
-  public Long getIdTo() {
-    return idTo;
+  public enum MessageStatus {
+    RECEIVED,
+    DELIVERED
   }
-  /* @Enumerated(EnumType.STRING)
+
+   @Enumerated(EnumType.STRING)
   private MessageType messageType; //Todo Stomp протокол
   public enum MessageType {
-      RECEIVED, DELIVERED
-  }*/
-
-  public void setIdTo(Long idTo) {
-    this.idTo = idTo;
+      DOCUMENT,STRING
   }
 
-  @Basic
-  @Column(name = "Message", nullable = true)
-  public String getMessage() {
-    return message;
-  }
-
-  public void setMessage(String message) {
-    this.message = message;
-  }
-
-  @Basic
+    @Basic
   @Column(name = "Time", nullable = true)
   public Timestamp getTime() {
     return time;
@@ -91,8 +82,5 @@ public class Message implements Serializable {
     return 1996936819;
   }
 
-  public enum MessageStatus {
-    RECEIVED,
-    DELIVERED
-  }
+
 }

@@ -2,13 +2,11 @@ package sb.rf.generalchat.controller.profile;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import sb.rf.generalchat.model.Message;
 import sb.rf.generalchat.model.User;
 import sb.rf.generalchat.model.dto.FirstMessageDto;
@@ -19,6 +17,7 @@ import sb.rf.generalchat.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 
 @Slf4j
@@ -50,6 +49,7 @@ public class MessageSendController {
               .idTo(userTo.getId())
               .time(new Timestamp(System.currentTimeMillis()))
               .message(messageForm.getMessage())
+                  .messageType(Message.MessageType.STRING)
               .build();
       log.info("Сообщение : {}", message.toString());
       messageService.recieveAndSaveStringMessage(message);
@@ -68,8 +68,17 @@ public class MessageSendController {
     }
   }
   @PostMapping("/sendDocument")
-  public String recieveDocument(@RequestBody MessagesDto messagesDto){
-    //messageService.recieveAndSaveStringMessage();
-    return null;//Todo - сохранение документов в отдельную таблицу (Document, например) с последующим возвращением  ссылки, по которой можно получить этот документ, эта ссылка должа сохраниться в Messages
+
+  public ResponseEntity<?> receiveDocument(@RequestBody MessagesDto messagesDto){
+    messageService.saveDocumentMessage(messagesDto);
+    return ResponseEntity.ok("complete");//Todo - сохранение документов в отдельную таблицу (Document, например) с последующим возвращением  ссылки, по которой можно получить этот документ, эта ссылка должа сохраниться в Messages
   }
+  @ResponseBody
+  @GetMapping("/getDocument/{documentUUID}")
+  public ResponseEntity<?> getDocument(@PathVariable("documentUUID") String uuid){
+    log.info("link to document is {}",uuid);
+    String imageVal = messageService.getImage(uuid);
+    return ResponseEntity.status(200).contentLength(imageVal.length()).body(imageVal);
+  }
+
 }

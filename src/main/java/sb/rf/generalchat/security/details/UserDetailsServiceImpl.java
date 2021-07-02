@@ -27,6 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                   log.info("Theres NO User in Db");
                   return new UsernameNotFoundException("User not found");
                 });
+    log.info("users messages, {}",user.getMessagesById());
     log.info("Loaded user {}", user);
     return new UserDetailsImpl(user);
   }

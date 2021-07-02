@@ -4,6 +4,7 @@ $(document).ready(function () {
     let previewImage =document.getElementById('image-preview__image');
 
     inpFile.addEventListener("change",function (){
+        console.log("state was changed?")
         const file = this.files[0];
         console.log(file)
         if(file){

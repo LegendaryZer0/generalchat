@@ -23,7 +23,7 @@ import sb.rf.generalchat.security.provider.JWTAuthProvider;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @Order(1)
 public class StatelessSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired private PasswordEncoder passwordEncoder;

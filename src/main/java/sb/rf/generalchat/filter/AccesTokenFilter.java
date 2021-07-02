@@ -56,6 +56,6 @@ public class AccesTokenFilter extends OncePerRequestFilter {
 
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-    return !request.getRequestURI().contains("/api");
+    return (request.getRequestURI().contains("/v2/api-docs") ||!(request.getRequestURI().contains("/api")));
   }
 }
