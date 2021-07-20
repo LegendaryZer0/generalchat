@@ -11,17 +11,19 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidPassName {
-    String message() default "invalid names";
+  String message() default "invalid names";
 
-    public String nickname();
-    public String password();
+  String nickname();
 
-    @Target({ElementType.TYPE})
-    @Retention(RetentionPolicy.RUNTIME)
-    @interface List {
-        ValidPassName[] value();
-    }
+  String password();
 
-    Class<?>[] groups() default {};
-    Class<? extends Payload>[] payload() default {};
+  Class<?>[] groups() default {};
+
+  Class<? extends Payload>[] payload() default {};
+
+  @Target({ElementType.TYPE})
+  @Retention(RetentionPolicy.RUNTIME)
+  @interface List {
+    ValidPassName[] value();
+  }
 }

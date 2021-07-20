@@ -2,94 +2,111 @@ package sb.rf.generalchat.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
 @Entity
-@Table(name = "account")
+@Table(
+    name = "account",
+    indexes = {@Index(name = "IDX_USER_email", columnList = "email")})
 @DynamicUpdate
+@ToString
 public class User implements Serializable {
 
+  @Column(name = "email", nullable = false, unique = true)
+  private String email;
 
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
+  @Column(name = "password", nullable = false)
+  private String password;
 
+  @Id
+  @Column(name = "id", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(name = "password", nullable = false)
-    private String password;
-    @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Type(type = "long")
-    private Long id;
+  @Column(name = "nickname")
+  private String nickname;
 
-    @Column(name = "nickname", nullable = true)
-    private String nickname;
+  @Column(name = "phone")
+  private String phone;
 
-    @Column(name = "phone")
-    private String phone;
-    @ToString.Exclude
-    @OneToMany(mappedBy = "userByIdFrom", fetch = FetchType.EAGER)
-    @JsonIgnore
-    private Set<Message> messagesById;
+ // @Fetch(FetchMode.SUBSELECT)
+  @OneToMany(mappedBy = "userByIdFrom",fetch = FetchType.EAGER)
+  @JsonIgnore
+  private Set<Message> messagesById;
 
-    @OneToMany(mappedBy = "userByIdFrom", fetch = FetchType.EAGER)
-    private Set<Chats> chatsById;
+//  @Fetch(FetchMode.SUBSELECT)
+  @OneToMany(mappedBy = "userByIdFrom",fetch = FetchType.EAGER)
+  private Set<Chats> chatsById;
 
-    @OneToMany(mappedBy = "userByIdTo", fetch = FetchType.EAGER)
-    private Set<Chats> chatsById_0;
-    @OneToOne(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
-    @JsonIgnore
-    private TechnicalInfo technicalInfo;
+//  @Fetch(FetchMode.SUBSELECT)
+  @OneToMany(mappedBy = "userByIdTo",fetch = FetchType.EAGER)
+  private Set<Chats> chatsById_0;
 
-    @OneToOne(mappedBy = "account_user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
-    @JsonIgnore
-    private BasicOpenIdUser basicOpenIdUser;
+  @OneToOne(
+      mappedBy = "userId",
+      fetch = FetchType.EAGER,
+      cascade = CascadeType.ALL,
+      orphanRemoval = true)
+  @JsonIgnore
+  private TechnicalInfo technicalInfo;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
-    @Enumerated(EnumType.STRING)
-    private State state;
+  @OneToOne(
+      mappedBy = "account_user",
+      fetch = FetchType.EAGER,
+      cascade = CascadeType.ALL,
+      orphanRemoval = true)
+  @JsonIgnore
+  private BasicOpenIdUser basicOpenIdUser;
 
-    @Transient
-    public boolean isActive() {
-        return this.getState().toString().equals("ACTIVE");
-    }
+  @Enumerated(EnumType.STRING)
+  private Role role;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(id, user.id) && Objects.equals(nickname, user.nickname) && Objects.equals(phone, user.phone);
-    }
+  @Enumerated(EnumType.STRING)
+  private State state;
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(email, password, id, nickname, phone);
-    }
+  @Transient
+  public boolean isActive() {
+    return this.getState().toString().equals("ACTIVE");
+  }
 
+  // Так ли это делается?
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+    User user = (User) o;
 
-    public enum Role {
-        ADMIN, USER, MODERATOR
-    }
+    return id != null && id.equals(user.id);
+  }
 
-    public enum State {
-        ACTIVE, BANNED, FROZEN
-    }
+  @Override
+  public int
+      hashCode() { // Todo разобраться,не стоит ли сюда так же дописывать id?(хеш мапы сейчас
+                   // испорченные)
+    return 562048007;
+  }
 
+  public enum Role {
+    ADMIN,
+    USER,
+    MODERATOR
+  }
 
-
-
+  public enum State {
+    ACTIVE,
+    BANNED,
+    FROZEN
+  }
 }

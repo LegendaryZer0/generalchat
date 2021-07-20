@@ -9,28 +9,36 @@ import org.springframework.stereotype.Component;
 import sb.rf.generalchat.security.authentication.JWTAuthentication;
 import sb.rf.generalchat.security.util.JwtUtil;
 
+import java.util.LinkedHashMap;
+
 @Component
 @Slf4j
 public class JWTAuthProvider implements AuthenticationProvider {
-    @Autowired
-    private JwtUtil jwtUtil;
+  @Autowired private JwtUtil jwtUtil;
 
-    @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        log.info("ProviderStartedToWork");
-        JWTAuthentication jwtAuthentication = (JWTAuthentication) authentication;
-        jwtUtil.extractUsername(authentication.getName());
-        jwtAuthentication.setAuthenticated(true);
-        jwtAuthentication.setAuthority(jwtUtil.extractClaim(authentication.getName(), claims -> claims.get("role", String.class)));
+  @Override
+  public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
-        log.info(jwtAuthentication.getAuthorities().toString());
-        log.info("jwtAuthentication  {}", jwtAuthentication);
-        return jwtAuthentication;
-    }
+    log.info("ProviderStartedToWork");
+    JWTAuthentication jwtAuthentication = (JWTAuthentication) authentication;
+    jwtUtil.extractUsername(authentication.getName());
+    jwtAuthentication.setAuthenticated(true);
+    jwtAuthentication.setAuthority(
+        jwtUtil.extractClaim(
+            jwtAuthentication.getName(),
+            claims ->
+                ((LinkedHashMap<String, String>) claims.get("role"))
+                    .values().stream().findFirst().get()));
 
-    @Override
-    public boolean supports(Class<?> authentication) {
+      log.info(jwtAuthentication.getAuthorities().toString());
+    log.info("jwtAuthentication  {}", jwtAuthentication);
 
-        return JWTAuthentication.class.equals(authentication);
-    }
+    return jwtAuthentication;
+  }
+
+  @Override
+  public boolean supports(Class<?> authentication) {
+
+    return JWTAuthentication.class.equals(authentication);
+  }
 }

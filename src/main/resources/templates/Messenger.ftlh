@@ -18,12 +18,12 @@
             src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.js"></script>
     <@h.headScript></@h.headScript>
 
-    <link rel="stylesheet" type="text/css" href="<@spring.url '/css/chatCss.css' />" />
+    <link rel="stylesheet" type="text/css" href="<@spring.url '/css/chatCss.css' />"/>
+    <link rel="stylesheet" type="text/css" href="<@spring.url '/css/fileUpload.css' />"/>
 
-
-    <meta  name = "_csrf"  content = "${_csrf.token}" />
+    <meta name="_csrf" content="${_csrf.token}"/>
     <! - имя заголовка по умолчанию - X-CSRF-TOKEN ->
-    <meta  name = "_csrf_header"  content = "${_csrf.headerName}" />
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
 
 
 </head>
@@ -54,18 +54,18 @@
                                         </div>
                                         <div class="user_info">
                                             <#if user.nickname??>
-                                                 <span>
+                                                <span>
                                                 ${user.nickname}
                                             </span>
-                                                <p> ${user.nickname}  is online</p>
+                                                <p> ${user.nickname} is online</p>
                                                 <p>  ${user.id} is online</p>
 
-                                                <#else>
-                                                    <span>
+                                            <#else>
+                                                <span>
                                                 ${user.email}
                                             </span>
-                                                    <p> ${user.email}</p>
-                                                    <p> ${user.id}</p>
+                                                <p> ${user.email}</p>
+                                                <p> ${user.id}</p>
 
 
 
@@ -112,18 +112,23 @@
                 <div class="card-body msg_card_body" id="messageBox">
 
 
-
-
-
                 </div>
                 <div class="card-footer">
                     <div class="input-group">
                         <div class="input-group-append">
-                            <span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
+                            <span class="input-group-text attach_btn">
+
+                                <input name="myFile" class="upload-photo-input" id="upload-photo-input" type="file">
+                            </span>
+                            <div class="image-preview" id="image-preview">
+                                <img src="" alt="Image Preview" class="image-preview__image" id="image-preview__image">
+                            </div>
                         </div>
-                        <textarea id="message-input" name="" class="form-control type_msg" placeholder="Type your message..."></textarea>
+                        <textarea id="message-input" name="" class="form-control type_msg"
+                                  placeholder="Type your message..."></textarea>
                         <div class="input-group-append">
-                            <span id="message-send-btn" class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span>
+                            <span id="message-send-btn" class="input-group-text send_btn"><i
+                                        class="fas fa-location-arrow"></i></span>
                         </div>
                     </div>
                 </div>
@@ -133,5 +138,6 @@
 </div>
 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 <script src="<@spring.url '/js/chat.js' />"></script>
+<script src="<@spring.url '/js/photosUpload.js' />"></script>
 </body>
 </html>

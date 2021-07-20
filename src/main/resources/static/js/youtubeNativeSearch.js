@@ -6,8 +6,8 @@ $(document).ready(function () {
          }*/
 
         $.ajax({
-            type: 'GET',
-            url: 'https://www.googleapis.com/youtube/v3/search?fields=items(id/kind,id/videoId,snippet/title,snippet/description,snippet/publishedAt,snippet/thumbnails/default/url)&key=AIzaSyAea0nVkFuNfkN296MN0MYVjxog0dRb5-Q&maxResults=7&part=id,snippet&q='+$('#YBSearchCriteria').val().replace(" ","%20") +'&type=video',
+            type: 'POST',
+            url: 'https://www.googleapis.com/youtube/v3/search?fields=items(id/kind,id/videoId,snippet/title,snippet/description,snippet/publishedAt,snippet/thumbnails/default/url)&key=AIzaSyAea0nVkFuNfkN296MN0MYVjxog0dRb5-Q&maxResults=1&part=id,snippet&q='+$('#YBSearchCriteria').val().replace(" ","%20") +'&type=video',
             /*  data: sendSearchCriteria,*/
 
             beforeSend: function (xhr) {

@@ -24,7 +24,7 @@ public class RegistrationDto{
     @ValidPassword(message = "{errors.invalid.password}")
     private String password;
     private String confirm;
-    public User getUser(){
+    public User returnUser(){
         return User
                 .builder()
                 .email(login)

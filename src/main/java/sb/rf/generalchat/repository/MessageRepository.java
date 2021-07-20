@@ -5,8 +5,6 @@ import sb.rf.generalchat.model.Message;
 
 import java.util.List;
 
-
-public interface MessageRepository extends JpaRepository<Message,Long> {
-    public List<Message> findAllByIdFromAndIdTo(long idFrom, long idTo);
-
+public interface MessageRepository extends JpaRepository<Message, Long> {
+  List<Message> findAllByIdFromAndIdTo(long idFrom, long idTo);
 }

@@ -1,55 +1,57 @@
 package sb.rf.generalchat.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
-
 @Table(name = "technical_Info", schema = "public")
-public class TechnicalInfo   implements Serializable {
+public class TechnicalInfo implements Serializable {
 
-    @Column(name = "uuid", nullable = true)
-    private UUID uuid;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
-    @Column(name = "isdeleted", nullable = false)
-    private Boolean isDeleted;
-    @Enumerated(EnumType.STRING)
-    private ConfirmState confirmState;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", referencedColumnName = "id", nullable = false)
-    private User userId;
+  @Column(name = "uuid", nullable = true)
+  private UUID uuid;
 
-    public enum ConfirmState{
-        CONFIRMED,NONE_CONFIRMED
-    }
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", nullable = false)
+  private Long id;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TechnicalInfo that = (TechnicalInfo) o;
-        return Objects.equals(uuid, that.uuid) && Objects.equals(id, that.id) && Objects.equals(isDeleted, that.isDeleted) && Objects.equals(confirmState, that.confirmState);
-    }
+  @Column(name = "isdeleted", nullable = false)
+  private Boolean isDeleted;
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(uuid, id, isDeleted, confirmState);
-    }
+  @Enumerated(EnumType.STRING)
+  private ConfirmState confirmState;
 
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "id", referencedColumnName = "id", nullable = false)
+  @ToString.Exclude
+  private User userId;
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+    TechnicalInfo that = (TechnicalInfo) o;
 
+    return id != null && id.equals(that.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return 728922588;
+  }
+
+  public enum ConfirmState {
+    CONFIRMED,
+    NONE_CONFIRMED
+  }
 }

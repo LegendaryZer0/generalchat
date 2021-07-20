@@ -14,59 +14,53 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class AccountController {
-    @Autowired
-    Converter<String, User> converter;
-    @Autowired
-    private UserService userService;
+  @Autowired Converter<String, User> converter;
+  @Autowired private UserService userService;
 
-    @GetMapping("/account/{user_email}")
-    public ResponseEntity<User> getUserByEmail(@PathVariable("user_email") String email) {
+  @GetMapping("/account/{user_email}")
+  public ResponseEntity<User> getUserByEmail(@PathVariable("user_email") String email) {
 
-        return ResponseEntity.ok(userService.getUserByEmail(User.builder().email(email).build()));
-    }
+    return ResponseEntity.ok(userService.getUserByEmail(User.builder().email(email).build()));
+  }
 
-    @GetMapping("/account")
-    public ResponseEntity<List<User>> getUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
-    }
+  @GetMapping("/account")
+  public ResponseEntity<List<User>> getUsers() {
+    return ResponseEntity.ok(userService.getAllUsers());
+  }
 
-    @PostMapping("/account")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+  @PostMapping("/account")
+  public ResponseEntity<User> createUser(@RequestBody User user) {
 
-        return ResponseEntity.ok(userService.addUser(user));
-    }
+    return ResponseEntity.ok(userService.addUser(user));
+  }
 
-    @PostMapping("/account/{admin_prop}")
-    public ResponseEntity<User> createAdmin(@PathVariable("admin_prop") String adminProp) {
-        return ResponseEntity.ok(userService.addUser(converter.convert(adminProp)));
+  @PostMapping("/account/{admin_prop}")
+  public ResponseEntity<User> createAdmin(@PathVariable("admin_prop") String adminProp) {
+    return ResponseEntity.ok(userService.addUser(converter.convert(adminProp)));
+  }
 
-    }
+  @PostMapping("/account/reg")
+  public ResponseEntity<User> basicAddUser(RegistrationDto dto) {
+    return ResponseEntity.ok(userService.addUser(dto.returnUser()));
+  }
 
-    @PostMapping("/account/reg")
-    public ResponseEntity<User> basicAddUser(RegistrationDto dto) {
-        return ResponseEntity.ok(userService.addUser(dto.getUser()));
-    }
+  @ApiOperation(
+      notes = "Not deleted user, just marked him as Deleted",
+      value = "Delete user by email",
+      response = Integer.class)
+  @DeleteMapping("/account/{user_email}")
+  public ResponseEntity<Integer> deleteUserByEmail(@PathVariable("user_email") String email) {
 
+    return ResponseEntity.ok(userService.deleteUser(email));
+  }
 
-    @ApiOperation(notes = "Not deleted user, just marked him as Deleted", value = "Delete user by email", response = Integer.class)
-    @DeleteMapping("/account/{user_email}")
-    public ResponseEntity<Integer> deleteUserByEmail(@PathVariable("user_email") String email) {
+  @RequestMapping(value = "/account", produces = "application/json", method = RequestMethod.PUT)
+  public ResponseEntity<User> updateUserById(@RequestBody User user) {
+    return ResponseEntity.ok(userService.updateUser(user));
+  }
 
-
-        return ResponseEntity.ok(userService.deleteUser(email));
-    }
-
-    @RequestMapping(value = "/account",
-            produces = "application/json",
-            method = RequestMethod.PUT)
-    public ResponseEntity<User> updateUserById(@RequestBody User user) {
-        return ResponseEntity.ok(userService.updateUser(user));
-    }
-
-    @GetMapping("/dailyonline")
-    public ResponseEntity<Integer> getDailyOnline() {
-        return ResponseEntity.ok(userService.findCountOfDailyChatedUsers());
-    }
-
-
+  @GetMapping("/dailyonline")
+  public ResponseEntity<Integer> getDailyOnline() {
+    return ResponseEntity.ok(userService.findCountOfDailyChatedUsers());
+  }
 }

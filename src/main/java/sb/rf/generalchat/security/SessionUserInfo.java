@@ -14,31 +14,24 @@ import sb.rf.generalchat.service.UserService;
 @Scope(scopeName = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Slf4j
 public class SessionUserInfo {
-    private User user;
+  private User user;
 
-    @Autowired
-    private UserService userService;
+  @Autowired private UserService userService;
 
-    public void setUserForce(User user) {
-        this.user = user;
+  public void setUserForce(User user) {
+    this.user = user;
+  }
+
+  public User getCurrentUser() {
+    if (user == null) {
+      String email =
+          ((UserDetails) (SecurityContextHolder.getContext().getAuthentication().getPrincipal()))
+              .getUsername();
+
+      log.info("email in session : {}   userService :: {}", email, userService);
+      user = userService.getUserByEmail(User.builder().email(email).build());
+      log.info("returned user from session info {}", user);
     }
-
-    public User getCurrentUser() {
-        if (user == null) {
-            String email =((UserDetails) (SecurityContextHolder
-                    .getContext()
-                    .getAuthentication()
-                    .getPrincipal()))
-                    .getUsername();
-
-            log.info("email in session : {}   userService :: {}",email,userService);
-            user = userService.getUserByEmail(
-                    User.builder()
-                            .email(email)
-                            .build()
-            );
-            log.info("returned user from session info {}",user);
-        }
-        return user;
-    }
+    return user;
+  }
 }

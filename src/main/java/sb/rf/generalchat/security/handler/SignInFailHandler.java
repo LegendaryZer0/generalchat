@@ -14,18 +14,17 @@ import java.io.ObjectInputStream;
 @Slf4j
 @Component
 public class SignInFailHandler extends SimpleUrlAuthenticationFailureHandler {
-    @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        // This is actually not an error, but an OK message. It is sent to avoid redirects.
-        try {
-            log.info("Given object");
-            log.info(new ObjectInputStream(request.getInputStream()).readObject().toString());
-        } catch (ClassNotFoundException e) {
-            throw  new IOException(e);
-        }
-        response.sendError(HttpServletResponse.SC_OK);
+  @Override
+  public void onAuthenticationFailure(
+      HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
+      throws IOException, ServletException {
+    // This is actually not an error, but an OK message. It is sent to avoid redirects.
+    try {
+      log.info("Given object");
+      log.info(new ObjectInputStream(request.getInputStream()).readObject().toString());
+    } catch (ClassNotFoundException e) {
+      throw new IOException(e);
     }
-
-
-
+    response.sendError(HttpServletResponse.SC_OK);
+  }
 }
